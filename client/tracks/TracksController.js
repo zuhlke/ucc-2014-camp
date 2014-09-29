@@ -1,24 +1,21 @@
-myapp.controller('TracksController', function($scope) {
+myapp.controller('TracksController', function ($scope, $rootScope) {
+  $scope.tracks = [];
 
-    function addTrack (name, author) {
-        var newTrack = {'name' : name, 'author' : author};
-        $scope.list.push(newTrack);
-    }
+  $scope.$on('fileDropped', function (event, theFile) {
+    $scope.tracks = [{
+        name: theFile.name,
+        file: theFile
+      }];
+  });
 
-    function removeTrack (position) {
-        $scope.list.splice(position,1);
-    }
+  $scope.play = function (track) {
+    var fileReader = new FileReader();
+    fileReader.onload = (function (theFile) {
+      return function (e) {
+        $rootScope.$broadcast('startPlaying', e.target.result);
+      };
+    })(track.file);
 
-    $scope.list = [
-        {'name':'Song1', 'currentlyPlaying' : true },
-        {'name':'Song2' },
-        {'name':'Song3' },
-        {'name':'Song4' }
-    ];
-
-    $scope.addNewTrack = addTrack;
-    $scope.removeTrack = removeTrack;
-    $scope.fileDropped = function (file) {
-        $scope.list.push({name: file.name})
-    }
+    fileReader.readAsDataURL(track.file);
+  };
 });

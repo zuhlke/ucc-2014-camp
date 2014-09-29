@@ -1,7 +1,7 @@
 <ul class="track-list" ng-controller="TracksController" drag-and-drop>
     <li class="track-list__empty" ng-hide="list.length">Playlist is empty</li>
-    <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in list">
-        <strong class="track-list__track-name">{{track.name}}</strong>
+    <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in tracks">
+        <strong class="track-list__track-name" ng-click="play(track)">{{track.name}}</strong>
         <span ng-click="removeTrack($index);">x</span>
     </li>
     <li class="track-list__upload-wrapper">

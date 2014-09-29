@@ -29,19 +29,10 @@ myapp.directive('dragAndDrop', function ($rootScope) {
 
       element.bind('drop', function(e) {
         e.preventDefault();
-
         var file = e.originalEvent.dataTransfer.files[0];
-        var fileReader = new FileReader();
-        fileReader.onload = (function(theFile) {
-          return function(e) {
-            $rootScope.$broadcast('startPlaying', e.target.result);
-          };
-        })(file);
-
-        fileReader.readAsDataURL(file);
-
-        scope.fileDropped(file);
-
+        scope.$apply(function() {
+          scope.$emit('fileDropped', file);
+        });
         return false;
       });
 

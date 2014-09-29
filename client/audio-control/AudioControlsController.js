@@ -11,11 +11,10 @@ myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $lo
       // Otherwise blocked by $secDelegate
       $scope.audio.source = $sce.trustAsResourceUrl(audioStream);
 
-      $scope.$apply();
-
       $timeout(function() {
         var player = $('#player')[0];
         player.load();
+        player.play();
       });
     });
 
