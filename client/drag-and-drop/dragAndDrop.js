@@ -40,6 +40,8 @@ myapp.directive('dragAndDrop', function ($rootScope) {
 
         fileReader.readAsDataURL(file);
 
+        scope.fileDropped(file);
+
         return false;
       });
 
