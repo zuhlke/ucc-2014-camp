@@ -1,3 +1,11 @@
-<div ng-controller="controller1">
-    <span>{{name}}</span>
+<div ng-controller="PlaylistsController">
+    <ul class="playlists">
+        <li class="playlists__playlist" ng-repeat="playlist in playlists">
+            {{playlist.name}}
+        </li>
+
+
+    </ul>
+
+
 </div>
