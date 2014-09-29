@@ -10,9 +10,17 @@
 </head>
 <body>
 
-<div ng-include="'partials/playlists/playlists.html'"></div>
-<div ng-include="'partials/tracks/tracks.html'"></div>
-<div ng-include="'partials/audio-control/audio-control.html'"></div>
+<div class="l-wrapper">
+    <div class="l-subwrapper">
+        <div class="l-menu" ng-include="'partials/playlists/playlists.html'"></div>
+        <div class="l-content" ng-include="'partials/tracks/tracks.html'"></div>
+    </div>
+    <footer class="l-footer">
+        <div ng-include="'partials/audio-control/audio-control.html'"></div>
+    </footer>
+</div>
+
+
 
 <!-- bower:js -->
 <script src="vendor/jquery/dist/jquery.js"></script>

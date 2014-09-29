@@ -1,7 +1,5 @@
-<div ng-controller="PlaylistsController as playlists">
-    <ul class="playlists">
-        <li class="playlists__playlist" ng-repeat="playlist in playlists.list">
-            <strong class="playlists__playlist-name">{{playlist.name}}</strong>
-        </li>
-    </ul>
-</div>
+<ul class="playlists" ng-controller="PlaylistsController as playlists">
+    <li class="playlists__playlist" ng-repeat="playlist in playlists.list">
+        <strong class="playlists__playlist-name">{{playlist.name}}</strong>
+    </li>
+</ul>
