@@ -4,38 +4,45 @@ myapp.directive('dragAndDrop', function () {
     restrict: 'A',
     link: function (scope, element, attrs) {
 
-      function handleDragStart(e) {
-        console.log("Start");
-      }
+      element.attr("draggable", true);
 
-      function handleDragOver(e) {
-        console.log("Drag Over");
-        if (e.preventDefault) {
-          e.preventDefault(); // Necessary. Allows us to drop.
-        }
+      element.bind('dragstart', function(e) {
+        console.log(e.type);
+      });
 
-        e.originalEvent.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+      element.bind('dragend', function(e) {
+        console.log(e.type);
+      });
+
+      element.bind('dragenter', function(e) {
+        console.log(e.type);
+      });
+
+      element.bind('dragover', function(e) {
+        console.log(e.type);
+        e.preventDefault();
+      });
+
+      element.bind('dragleave', function(e) {
+        console.log(e.type);
+      });
+
+      element.bind('drop', function(e) {
+        e.preventDefault();
+
+        var file = e.originalEvent.dataTransfer.files[0];
+        var fileReader = new FileReader();
+        fileReader.onload = (function(theFile) {
+          return function(e) {
+            console.log(e.target.result);
+            element.append($('<div>').attr('id', 'fileContent').text(e.target.result));
+          };
+        })(file);
+
+        fileReader.readAsText(file);
 
         return false;
-      }
-
-      function handleDragEnter(e) {
-        console.log("Drag Enter");
-        this.style.opacity = '0.4';  // this / e.target is the source node.
-        this.classList.add('over');
-      }
-
-      function handleDragLeave(e) {
-        console.log("Drag Leave");
-        this.style.opacity = '1';  // this / e.target is the source node.
-        this.classList.remove('over');  // this / e.target is previous target element.
-      }
-
-      element.attr("draggable", true);
-      element.bind('dragstart', handleDragStart);
-      element.bind('dragenter', handleDragEnter);
-      element.bind('dragover', handleDragOver);
-      element.bind('dragleave', handleDragLeave);
+      });
 
     }
   };
