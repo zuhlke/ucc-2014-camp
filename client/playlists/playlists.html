@@ -1,9 +1,10 @@
 <ul class="playlists" ng-controller="PlaylistsController as playlists">
     <li class="playlists__playlist" ng-repeat="playlist in playlists.list">
         <strong class="playlists__playlist-name">{{playlist.name}}</strong>
+        <span ng-click="playlists.removePlaylist($index)">x</span>
     </li>
     <li class="playlists__playlist playlists__playlist_create">
-        <span class="playlists__playlist-create">
+        <span class="playlists__playlist-create" ng-click="playlists.addNewPlaylist('Groovy');">
             <i class="fa fa-plus"></i> Create a playlist
         </span>
     </li>
