@@ -1,7 +1,19 @@
 @import "../core_styles/base.less";
 
 .track-list {
-  background-color: @dark-brown;
+  background-color: @dark-brown-trans;
   flex: 7;
   color: @light;
+  padding: @gutter;
 }
+
+.track-list__track {
+  padding: @gutter 0;
+  border-bottom: 1px solid @gold-trans;
+}
+
+.track-list__track:first-child {
+  padding-top: 0;
+}
+
+
