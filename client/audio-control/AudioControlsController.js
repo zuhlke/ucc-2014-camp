@@ -1,5 +1,6 @@
 myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $log) {
     $scope.name = 'Audio Controls';
+    $scope.isPlaying = false;
     $scope.audio = {
       source: 'audio-example/TestFile.mp3'
     };
@@ -20,11 +21,13 @@ myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $lo
 
     $scope.play = function() {
       var player = $('#player')[0];
+      $scope.isPlaying = true;
       player.play();
     };
 
-    $scope.stop = function() {
+    $scope.pause = function() {
       var player = $('#player')[0];
+      $scope.isPlaying = false;
       player.pause();
     }
 

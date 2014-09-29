@@ -2,4 +2,7 @@
     <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in tracks.list">
         <strong class="track-list__track-name">{{track.name}}</strong>
     </li>
+    <li class="track-list__upload-wrapper">
+        <button class="btn btn-primary"><i class="fa fa-upload"></i> Add a music file</button>
+    </li>
 </ul>

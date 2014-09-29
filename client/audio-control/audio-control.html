@@ -8,11 +8,17 @@
         <div class="audio-track__progress"></div>
         <ul class="audio-track__controls">
             <li class="audio-track__control">
-                <button type="button" ng-click="play()">Play</button>
-                <button type="button" ng-click="stop()">Stop</button>
+                <i class="fa fa-backward"></i>
             </li>
             <li class="audio-track__control">
-                <button type="button">Volume</button>
+                <i ng-hide="isPlaying" class="fa fa-play" ng-click="play()"></i>
+                <i ng-show="isPlaying" class="fa fa-pause" ng-click="pause()"></i>
+            </li>
+            <li class="audio-track__control">
+                <i class="fa fa-forward"></i>
+            </li>
+            <li class="audio-track__control">
+                <i class="fa fa-volume-down"></i>
             </li>
         </ul>
     </div>
