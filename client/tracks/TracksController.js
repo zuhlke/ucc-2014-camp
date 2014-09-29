@@ -19,4 +19,7 @@ myapp.controller('TracksController', function() {
 
     this.addNewTrack = addTrack;
     this.removeTrack = removeTrack;
+    this.fileDropped = function (file) {
+        _root.list.push({name: file.name})
+    }
 });
