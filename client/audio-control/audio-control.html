@@ -1,6 +1,18 @@
 <div ng-controller="AudioControlsController" class="audio-control">
-    <audio id="player" controls>
+    <audio id="player">
         <source src="audio-example/TestFile.mp3" type="audio/mpeg">
         Your browser does not support the audio tag.
     </audio>
+
+    <div class="audio-track">
+        <div class="audio-track__progress"></div>
+        <ul class="audio-track__controls">
+            <li class="audio-track__control">
+                <button type="button">Play</button>
+            </li>
+            <li class="audio-track__control">
+                <button type="button">Volume</button>
+            </li>
+        </ul>
+    </div>
 </div>

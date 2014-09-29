@@ -1,3 +1,7 @@
-<div ng-controller="TracksController">
-    <span>{{name}}</span>
+<div ng-controller="TracksController as tracks">
+    <ul class="track-list">
+        <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in tracks.list">
+            <strong class="track-list__track-name">{{track.name}}</strong>
+        </li>
+    </ul>
 </div>
