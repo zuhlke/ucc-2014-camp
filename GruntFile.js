@@ -13,7 +13,7 @@
  */
 module.exports = function (grunt) {
 
-    grunt.registerTask('build', ['clean:build', 'less', 'wiredep', 'concat', 'uglify']);
+    grunt.registerTask('build', ['clean:build', 'copy:partials', 'less', 'wiredep', 'concat', 'uglify']);
 
     grunt.registerTask('build-watch', ['build', 'watch']);
 
@@ -49,11 +49,12 @@ module.exports = function (grunt) {
         less: {
             client: {
                 options: {
-                    paths: [ 'client/less', 'public/vendor/bootstrap/less' ],
-                    concat: true
+                    paths: [ 'client/**/*.less', 'public/vendor/bootstrap/less' ],
+                    concat: true,
+                    cleancss: true
                 },
                 files: {
-                    'public/css/app.css': 'client/less/styles.less'
+                    'public/css/app.css': 'client/styles.less'
                 }
             }
         },
@@ -71,7 +72,7 @@ module.exports = function (grunt) {
                             src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     }
                 },
-                src: [ 'processed/js/app.js', 'client/js/**/*.js'],
+                src: [ 'client/**/*.js'],
                 dest: 'public/js/app.js'
             }
         },
@@ -91,6 +92,21 @@ module.exports = function (grunt) {
             }
         },
 
+        // Copy partials to public
+        // https://github.com/gruntjs/grunt-contrib-copy
+        copy: {
+            partials: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'client/',
+                        src: ['**/*.html'],
+                        dest: 'public/partials/',
+                        filter: 'isFile'}
+                ]
+            }
+        },
+
         // Clean
         // https://github.com/gruntjs/grunt-contrib-clean
         clean: {
@@ -99,7 +115,8 @@ module.exports = function (grunt) {
                 src: [
                     'processed',
                     'public/js',
-                    'public/css'
+                    'public/css',
+                    'public/partials'
                 ]
             },
             // Run this task with the 'grunt clean:test' command.
@@ -126,15 +143,19 @@ module.exports = function (grunt) {
                 livereload: true
             },
             js: {
-                files: ['client/js/**/*.js'],
+                files: ['client/**/*.js'],
                 tasks: ['concat', 'uglify']
             },
             css: {
-                files: ['client/less/**/*.less'],
+                files: ['client/**/*.less'],
                 tasks: ['less:client']
             },
-            html: {
-                files: ['public/index.html', 'public/partials/**/*.html']
+            partials: {
+                files: ['client/**/*.html'],
+                tasks: ['copy:partials']
+            },
+            index: {
+                files: ['public/index.html']
             }
 
         },
