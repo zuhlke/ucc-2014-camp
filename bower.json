@@ -1,20 +1,19 @@
 {
-    "name": "ucc-2014-camp",
-    "dependencies": {
-        "angular": "~1.2.18",
-        "lodash": "~2.4.1",
-        "bootstrap": "~3.2.0",
-        "components-font-awesome": "~4.1.0",
-        "jquery": "~2.1.1",
-        "jquery-ui": "~1.10.4"
-    },
-    "devDependencies": {
-        "angular-mocks": "~1.2.13",
-        "jasmine-jquery": "~2.0.5",
-        "jasmine-sinon": "~0.4.0"
-    },
-    "resolutions": {
-        "bootstrap": "~3.2.0",
-        "jquery": "~2.1.1"
-    }
+  "name": "ucc-2014-camp",
+  "dependencies": {
+    "angular": "~1.2.18",
+    "lodash": "~2.4.1",
+    "bootstrap": "~3.2.0",
+    "components-font-awesome": "~4.1.0",
+    "jquery": "~2.1.1",
+    "jquery-ui": "~1.10.4"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.13",
+    "jasmine-jquery": "~2.0.5",
+    "jasmine-sinon": "~0.4.0"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1"
+  }
 }
