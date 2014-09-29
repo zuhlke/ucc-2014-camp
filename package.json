@@ -10,7 +10,7 @@
     "type": "git",
     "url": ""
   },
-  "devDependencies": {
+  "dependencies": {
     "bower": "~1.3.5",
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
