@@ -13,7 +13,9 @@ myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $lo
       $scope.$apply();
 
       $timeout(function() {
-        $('#player').load();
+        var player = $('#player')[0];
+        player.load();
+        player.play();
       });
     });
 
