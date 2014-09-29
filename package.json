@@ -4,7 +4,7 @@
   "private": true,
   "description": "",
   "scripts": {
-    "postinstall": "node ./node_modules/bower/bin/bower install --config.interactive=false; node ./node_modules/protractor/bin/webdriver-manager update"
+    "postinstall": "node ./node_modules/bower/bin/bower install --config.interactive=false && node ./node_modules/protractor/bin/webdriver-manager update"
   },
   "repository": {
     "type": "git",
