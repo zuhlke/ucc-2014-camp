@@ -1,10 +1,10 @@
-<ul class="track-list" ng-controller="TracksController as tracks" drag-and-drop>
-    <li class="track-list__empty" ng-hide="tracks.list.length">Playlist is empty</li>
-    <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in tracks.list">
+<ul class="track-list" ng-controller="TracksController" drag-and-drop>
+    <li class="track-list__empty" ng-hide="list.length">Playlist is empty</li>
+    <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in list">
         <strong class="track-list__track-name">{{track.name}}</strong>
-        <span ng-click="tracks.removeTrack($index);">x</span>
+        <span ng-click="removeTrack($index);">x</span>
     </li>
     <li class="track-list__upload-wrapper">
-        <button class="btn btn-primary" ng-click="tracks.addNewTrack('Tool','Parabola')"><i class="fa fa-upload"></i> Add a music file</button>
+        <button class="btn btn-primary" ng-click="addNewTrack('Tool','Parabola')"><i class="fa fa-upload"></i> Add a music file</button>
     </li>
 </ul>
