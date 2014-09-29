@@ -1,4 +1,4 @@
-myapp.directive('dragAndDrop', function () {
+myapp.directive('dragAndDrop', function ($rootScope) {
 
   return {
     restrict: 'A',
@@ -34,12 +34,11 @@ myapp.directive('dragAndDrop', function () {
         var fileReader = new FileReader();
         fileReader.onload = (function(theFile) {
           return function(e) {
-            console.log(e.target.result);
-            element.append($('<div>').attr('id', 'fileContent').text(e.target.result));
+            $rootScope.$broadcast('startPlaying', e.target.result);
           };
         })(file);
 
-        fileReader.readAsText(file);
+        fileReader.readAsDataURL(file);
 
         return false;
       });

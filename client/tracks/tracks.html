@@ -1,4 +1,4 @@
-<ul class="track-list" ng-controller="TracksController as tracks">
+<ul class="track-list" ng-controller="TracksController as tracks" drag-and-drop>
     <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.currentlyPlaying}" ng-repeat="track in tracks.list">
         <strong class="track-list__track-name">{{track.name}}</strong>
     </li>
