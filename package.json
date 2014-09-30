@@ -26,6 +26,7 @@
     "grunt-preprocess": "~4.0.0",
     "grunt-protractor-runner": "~1.0.1",
     "grunt-wiredep": "^1.9.0",
+    "http": "0.0.0",
     "karma": "~0.12.16",
     "karma-coverage": "~0.2.6",
     "karma-jasmine": "~0.2.0",
@@ -33,6 +34,8 @@
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-phantomjs-launcher": "~0.1.4",
     "lodash": "~2.4.1",
-    "protractor": "~0.24.2"
+    "node-static": "^0.7.6",
+    "protractor": "~0.24.2",
+    "socket.io": "^1.1.0"
   }
 }
