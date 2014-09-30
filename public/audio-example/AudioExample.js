@@ -5,13 +5,24 @@ console.log(window.AudioContext);
 var audioElement = document.querySelector('audio');
 
 var audioContext = new AudioContext();
-var source = audioContext.createMediaElementSource(audioElement);
+var source = audioContext.createBufferSource();
 
-var gainNode = audioContext.createGain();
-gainNode.gain.value = 0.5;
-source.connect(gainNode);
+var request = new XMLHttpRequest();
+request.open("GET", "TestFile.mp3", true); // Path to Audio File
+request.responseType = "arraybuffer"; // Read as Binary Data
 
-gainNode.connect(audioContext.destination);
+request.onload = function () {
+    var incomingData = request.response;
 
+    audioContext.decodeAudioData(incomingData, function (buffer) {
+            source.buffer = buffer;
+            source.connect(audioContext.destination);
+            source.start(0);
+        },
+        function (e) {
+            "Error with decoding audio data" + e.err;
+        });
 
-//source.start(0);
+};
+
+request.send();
