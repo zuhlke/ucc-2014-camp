@@ -1,7 +1,7 @@
 .l-wrapper {
   display: flex;
-  flex-flow: row wrap;
-  flex-direction: column;
+  flex-direction:row;
+  flex-wrap: wrap;
   position: absolute;
   top: 0;
   left: 0;
@@ -9,27 +9,18 @@
   bottom: 0;
 }
 
-.l-subwrapper {
-  flex: 9;
-  display: flex;
-  flex-direction:row;
-  flex-wrap: wrap;
-}
-
-.l-footer {
-  flex: 1;
-  position: relative;
-}
-
-.l-menu {
+.l-secondary-content {
   flex: 3;
   overflow-x: hidden;
   overflow-y: scroll;
   min-width: 200px;
   background-color: @secondary-background;
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: column;
 }
 
-.l-content {
+.l-primary-content {
   flex: 7;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -37,4 +28,13 @@
   position: relative;
   background-color: @primary-background;
 
+}
+
+.l-menu {
+  flex: 9;
+}
+
+.l-controls {
+  flex: 1;
+  position: relative;
 }
