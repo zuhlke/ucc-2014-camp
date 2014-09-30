@@ -1,4 +1,4 @@
-myapp.directive('dragAndDrop', function ($rootScope) {
+myapp.directive('dragAndDrop', function () {
 
     return {
         restrict: 'A',

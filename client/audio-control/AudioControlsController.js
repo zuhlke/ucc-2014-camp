@@ -1,4 +1,4 @@
-myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $log) {
+myapp.controller('AudioControlsController', function($scope, $sce, $timeout) {
     $scope.name = 'Audio Controls';
     $scope.isPlaying = false;
     $scope.audio = {
@@ -6,8 +6,6 @@ myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $lo
     };
 
     $scope.$on('startPlaying', function(event, audioStream) {
-      $log.debug('Received startPlaying event');
-
       // Otherwise blocked by $secDelegate
       $scope.audio.source = $sce.trustAsResourceUrl(audioStream);
 
@@ -29,5 +27,4 @@ myapp.controller('AudioControlsController', function($scope, $sce, $timeout, $lo
       $scope.isPlaying = false;
       player.pause();
     }
-
 });
