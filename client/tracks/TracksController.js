@@ -1,4 +1,4 @@
-myapp.controller('TracksController', function ($scope, $rootScope) {
+myapp.controller('TracksController', function ($scope, $rootScope, $log, audioService) {
   $scope.tracks = [];
 
   $scope.$on('fileDropped', function (event, files) {
@@ -11,13 +11,9 @@ myapp.controller('TracksController', function ($scope, $rootScope) {
   });
 
   $scope.play = function (track) {
-    var fileReader = new FileReader();
-    fileReader.onload = (function (theFile) {
-      return function (e) {
-        $rootScope.$broadcast('startPlaying', e.target.result);
-      };
-    })(track.file);
-    fileReader.readAsDataURL(track.file);
+    _.debounce(function () {
+      audioService.play(track.file);
+    }, 150)();
   };
 
   $scope.removeTrack = function (track) {
