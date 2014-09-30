@@ -13,7 +13,7 @@
  */
 module.exports = function (grunt) {
 
-    grunt.registerTask('build', ['clean:build', 'copy:partials', 'less', 'wiredep', 'concat', 'uglify']);
+    grunt.registerTask('build', ['clean:build', 'copy:partials', 'less', 'concat', 'uglify']);
 
     grunt.registerTask('build-watch', ['build', 'watch']);
 
