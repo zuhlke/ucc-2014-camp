@@ -7,6 +7,22 @@
   left: 0;
   right: 0;
   bottom: 0;
+  background: url('../images/bg_1600.jpg') top center no-repeat @inverse-color;
+  background-size: auto 100%;
+}
+
+@media (max-width:960px) and (min-width:480px) {
+  .l-wrapper {
+    background: url('../images/bg_960.jpg') top center no-repeat;
+    background-size: auto auto;
+  }
+}
+
+@media (max-width:480px)  {
+  .l-wrapper {
+    background: url('../images/bg_480.jpg') top center no-repeat;
+    background-size: auto auto;
+  }
 }
 
 .l-secondary-content {
