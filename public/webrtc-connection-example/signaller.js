@@ -3,7 +3,21 @@ var http = require('http');
 var file = new(static.Server)();
 var app = http.createServer(function (req, res) {
     file.serve(req, res);
-}).listen(2013);
+}).listen(8080);
+
+
+require('http').createServer(function (request, response) {
+
+  //
+  // Serve files!
+  //
+  file.serve(request, response);
+
+}).listen(8080);
+
+require('http').createServer(function (request, response) {
+  file.serve(request, response);
+}).listen(8080);
 
 var io = require('socket.io').listen(app);
 

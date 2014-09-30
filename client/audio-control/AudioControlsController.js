@@ -1,21 +1,14 @@
 myapp.controller('AudioControlsController', function ($scope, audioService) {
 
-  $scope.isPlaying = false;
+  $scope.audioService = audioService;
 
   $scope.play = function () {
-    _.debounce(audioService.play, 150)();
+    _.debounce(function() { audioService.play(); $scope.$apply(); }, 150)();
   };
 
   $scope.pause = function () {
-    _.debounce(audioService.stop, 150)();
+    _.debounce(function() { audioService.stop(); $scope.$apply(); }, 150)();
   };
 
-  $scope.$on('playing', function(track) {
-    $scope.isPlaying = true;
-  });
-
-  $scope.$on('stopped', function(track) {
-    $scope.isPlaying = false;
-  });
 
 });

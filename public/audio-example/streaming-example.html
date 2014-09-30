@@ -103,7 +103,9 @@
       if (message.data.candidate) {
         peers[message.from].peerconnection.addIceCandidate(new RTCIceCandidate(message.data.candidate));
       }
-    } else if (message.data.type === 'sdp') {
+    }
+    // Session Description Protocol
+    else if (message.data.type === 'sdp') {
       peers[message.from].peerconnection.setRemoteDescription(new RTCSessionDescription(message.data.sdp));
     }
   });

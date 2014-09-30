@@ -1,4 +1,4 @@
-myapp.factory('audioService', function ($window, $rootScope) {
+myapp.factory('audioService', function ($window, $q) {
 
   $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
 
@@ -6,40 +6,42 @@ myapp.factory('audioService', function ($window, $rootScope) {
   var currentPlayingSource;
   var currentTrack;
 
-  var play = function () {
-    if (currentPlayingSource) {
+  var audioService = {};
+  audioService.play = function () {
+    if (!audioService.isPlaying) {
       currentPlayingSource.start(0);
-      $rootScope.$broadcast('playing', currentTrack);
+      audioService.isPlaying = true;
     }
   };
 
-  var stop = function () {
-    if (currentPlayingSource) {
+  audioService.stop = function () {
+    if (audioService.isPlaying && currentPlayingSource) {
       currentPlayingSource.stop();
-      $rootScope.$broadcast('stopped', currentTrack);
+      audioService.isPlaying = false;
     }
   };
 
-  return {
+  audioService.loadAndPlay = function (file) {
+    currentTrack = file;
 
-    loadAndPlay: function (file) {
-      currentTrack = file;
-      var fileReader = new FileReader();
-      fileReader.onload = function (e) {
-        context.decodeAudioData(e.target.result, function (buffer) {
-          stop();
-          currentPlayingSource = context.createBufferSource();
-          currentPlayingSource.buffer = buffer;
-          currentPlayingSource.connect(context.destination);
-          play();
-        });
-      };
-      fileReader.readAsArrayBuffer(file);
-    },
+    var p = $q.defer();
 
-    play: play,
-
-    stop: stop
-
+    var fileReader = new FileReader();
+    fileReader.onload = function (e) {
+      context.decodeAudioData(e.target.result, function (buffer) {
+        audioService.stop();
+        currentPlayingSource = context.createBufferSource();
+        currentPlayingSource.buffer = buffer;
+        currentPlayingSource.connect(context.destination);
+        audioService.play();
+        p.resolve();
+      });
+    };
+    fileReader.readAsArrayBuffer(file);
+    return p.promise;
   };
+
+  audioService.isPlaying = false;
+
+  return audioService;
 });
