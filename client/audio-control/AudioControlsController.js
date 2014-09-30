@@ -1,30 +1,15 @@
-myapp.controller('AudioControlsController', function($scope, $sce, $timeout) {
-    $scope.name = 'Audio Controls';
-    $scope.isPlaying = false;
-    $scope.audio = {
-      source: 'audio-example/TestFile.mp3'
-    };
+myapp.controller('AudioControlsController', function ($scope, $sce, $timeout) {
 
-    $scope.$on('startPlaying', function(event, audioStream) {
-      // Otherwise blocked by $secDelegate
-      $scope.audio.source = $sce.trustAsResourceUrl(audioStream);
+  $scope.isPlaying = false;
 
-      $timeout(function() {
-        var player = $('#player')[0];
-        player.load();
-        player.play();
-      });
-    });
+  $scope.audio = {
+    source: 'audio-example/TestFile.mp3'
+  };
 
-    $scope.play = function() {
-      var player = $('#player')[0];
-      $scope.isPlaying = true;
-      player.play();
-    };
+  $scope.$on('startPlaying', function (event, audioStream) {
+    // Otherwise blocked by $secDelegate
+    $scope.audio.source = $sce.trustAsResourceUrl(audioStream);
+    $scope.play();
+  });
 
-    $scope.pause = function() {
-      var player = $('#player')[0];
-      $scope.isPlaying = false;
-      player.pause();
-    }
 });
