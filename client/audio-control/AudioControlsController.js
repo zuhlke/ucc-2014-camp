@@ -5,9 +5,13 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
   $scope.play = function () {
 
     webRTCService.connect()
-      .then(webRTCService.getPeers())
-      .then(function(peers) {
-        _(peers).forEach(function(peer) {
+      .then(function(id) {
+        console.log('My ID is: ' + id);
+        return webRTCService.getPeers();
+      })
+      .then(function(result) {
+        console.log('Available peers: ' + result.data);
+        _(result.data.peers).forEach(function(peer) {
           webRTCService.sendMessage(peer, 'Hello');
         });
       });
