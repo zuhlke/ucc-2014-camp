@@ -6,19 +6,15 @@ myapp.directive('ngAudio', function () {
 
       scope.play = function () {
         scope.isPlaying = true;
-        $('#player')[0].play();
+        var player = $('#player')[0];
+        player.load();
+        player.play();
       };
 
       scope.pause = function () {
         scope.isPlaying = false;
         $('#player')[0].pause();
       };
-
-      scope.$on('startPlaying', function (event, audioStream) {
-        var player = $('#player')[0];
-        player.load();
-        player.play();
-      });
     }
   };
 
