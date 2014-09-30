@@ -13,6 +13,8 @@
 .audio-track__controls {
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  margin: 0 @gutter;
 }
 
 .audio-track__control {
@@ -25,10 +27,17 @@
   margin: 0 @gutter;
   line-height: @control-size;
   border-radius: @control-size / 2;
+  cursor: pointer;
 }
 
 .audio-track__control_primary {
   font-size: 1.4em;
+}
+
+
+.audio-track__control_secondary {
+  background-color: transparent;
+  color: @primary-color;
 }
 
 .audio-track__control .fa-play {
@@ -57,5 +66,21 @@
 .audio-track__control .fa-volume-down {
   position: relative;
   top: 0.05em;
+}
+
+.audio-track__control .fa-bars {
+  position: relative;
+  top: 0.05em;
+}
+
+.audio-track__control_conditional{
+  visibility: hidden;
+}
+
+
+@media (max-width:@break-point-small)  {
+  .audio-track__control_conditional{
+    visibility: visible;
+  }
 }
 

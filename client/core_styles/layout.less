@@ -11,14 +11,14 @@
   background-size: auto 100%;
 }
 
-@media (max-width:960px) and (min-width:480px) {
+@media (max-width:@break-point-medium) and (min-width:@break-point-small) {
   .l-wrapper {
     background: url('../images/bg_960.jpg') top center no-repeat;
     background-size: auto auto;
   }
 }
 
-@media (max-width:480px)  {
+@media (max-width:@break-point-small)  {
   .l-wrapper {
     background: url('../images/bg_480.jpg') top center no-repeat;
     background-size: auto auto;
@@ -29,7 +29,7 @@
   flex: 3;
   overflow-x: hidden;
   overflow-y: scroll;
-  min-width: 200px;
+  min-width: 300px;
   background-color: @secondary-background;
   display: flex;
   flex-flow: row wrap;
@@ -40,7 +40,7 @@
   flex: 7;
   overflow-x: hidden;
   overflow-y: scroll;
-  min-width: 400px;
+  min-width: 300px;
   position: relative;
   background-color: @primary-background;
 
