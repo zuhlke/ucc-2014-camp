@@ -1,4 +1,4 @@
-myapp.directive('dragAndDrop', function () {
+myapp.directive('dragAndDrop', function ($rootScope) {
 
   return {
     restrict: 'A',
@@ -37,7 +37,7 @@ myapp.directive('dragAndDrop', function () {
 
         var files = e.originalEvent.dataTransfer.files;
         scope.$apply(function () {
-          scope.$emit('fileDropped', files);
+          $rootScope.$broadcast('fileDropped', files);
         });
         return false;
       });
