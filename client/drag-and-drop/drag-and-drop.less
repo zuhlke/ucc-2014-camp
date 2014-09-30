@@ -1,3 +1,10 @@
-p.over {
-  border: 3px dotted grey;
+@import "../core_styles/base.less";
+
+.drop-zone {
+  border: @drop-zone-border-width dashed transparent;
+}
+
+
+.drop-zone_active {
+  border: @drop-zone-border-width dashed @gold-trans;
 }
