@@ -1,4 +1,4 @@
-myapp.directive('ngAudio', function ($timeout) {
+myapp.directive('ngAudio', function () {
 
   return {
     restrict: 'A',
@@ -15,11 +15,9 @@ myapp.directive('ngAudio', function ($timeout) {
       };
 
       scope.$on('startPlaying', function (event, audioStream) {
-        $timeout(function () {
-          var player = $('#player')[0];
-          player.load();
-          player.play();
-        });
+        var player = $('#player')[0];
+        player.load();
+        player.play();
       });
     }
   };
