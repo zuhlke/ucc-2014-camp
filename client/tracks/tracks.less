@@ -1,10 +1,14 @@
 @import "../core_styles/base.less";
 
 .track-list {
-  background-color: @dark-brown-trans;
   flex: 7;
   color: @light;
-  padding: @gutter;
+  margin: @gutter - @drop-zone-border-width;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .track-list__track {

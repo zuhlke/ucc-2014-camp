@@ -1,11 +1,13 @@
 myapp.controller('TracksController', function ($scope, $rootScope) {
   $scope.tracks = [];
 
-  $scope.$on('fileDropped', function (event, theFile) {
-    $scope.tracks = [{
-        name: theFile.name,
-        file: theFile
-      }];
+  $scope.$on('fileDropped', function (event, files) {
+    _(files).forEach(function (file) {
+      $scope.tracks.push({
+        file: file,
+        name: file.name
+      });
+    });
   });
 
   $scope.play = function (track) {
@@ -18,8 +20,8 @@ myapp.controller('TracksController', function ($scope, $rootScope) {
     fileReader.readAsDataURL(track.file);
   };
 
-  $scope.removeTrack = function(track) {
-    _($scope.tracks).remove(function(t) {
+  $scope.removeTrack = function (track) {
+    _($scope.tracks).remove(function (t) {
       return t === track;
     });
   };

@@ -1,5 +1,62 @@
 @import "../core_styles/base.less";
 
+@control-size: 2em;
+
 .audio-control {
   background-color: @brown;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
+
+.audio-track__controls {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.audio-track__control {
+  display: inline-block;
+  background-color: @light;
+  height: @control-size;
+  width: @control-size;
+  text-align: center;
+  margin: 0 @gutter;
+  line-height: @control-size;
+  border-radius: @control-size / 2;
+}
+
+.audio-track__control_primary {
+  font-size: 1.4em;
+}
+
+.audio-track__control .fa-play {
+  position: relative;
+  left: 0.1em;
+  top: 0.1em;
+}
+
+.audio-track__control .fa-pause {
+  position: relative;
+  top: 0.1em;
+}
+
+.audio-track__control .fa-backward {
+  position: relative;
+  left: -0.1em;
+  top: 0.05em;
+}
+
+.audio-track__control .fa-forward {
+  position: relative;
+  left: 0.1em;
+  top: 0.05em;
+}
+
+.audio-track__control .fa-volume-down {
+  position: relative;
+  top: 0.05em;
+}
+

@@ -1,37 +1,43 @@
-myapp.directive('dragAndDrop', function ($rootScope) {
+myapp.directive('dragAndDrop', function () {
 
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
 
+      var dragDropClass = 'drop-zone';
+      var dragDropActiveClass = 'drop-zone_active';
+      element.addClass(dragDropClass);
+
       element.attr("draggable", true);
 
-      element.bind('dragstart', function(e) {
-        console.log(e.type);
+      element.bind('dragstart', function (e) {
+        element.addClass(dragDropActiveClass);
       });
 
-      element.bind('dragend', function(e) {
-        console.log(e.type);
+      element.bind('dragend', function (e) {
+        element.removeClass(dragDropActiveClass);
       });
 
-      element.bind('dragenter', function(e) {
-        console.log(e.type);
+      element.bind('dragenter', function (e) {
+        element.addClass(dragDropActiveClass);
       });
 
-      element.bind('dragover', function(e) {
-        console.log(e.type);
+      element.bind('dragover', function (e) {
         e.preventDefault();
       });
 
-      element.bind('dragleave', function(e) {
-        console.log(e.type);
+      element.bind('dragleave', function (e) {
+        element.removeClass(dragDropActiveClass);
       });
 
-      element.bind('drop', function(e) {
+      element.bind('drop', function (e) {
         e.preventDefault();
-        var file = e.originalEvent.dataTransfer.files[0];
-        scope.$apply(function() {
-          scope.$emit('fileDropped', file);
+
+        element.removeClass(dragDropActiveClass);
+
+        var files = e.originalEvent.dataTransfer.files;
+        scope.$apply(function () {
+          scope.$emit('fileDropped', files);
         });
         return false;
       });
