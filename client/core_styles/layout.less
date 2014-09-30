@@ -1,6 +1,6 @@
 .l-wrapper {
   display: flex;
-  flex-direction:row;
+  flex-direction: row-reverse;
   flex-wrap: wrap;
   position: absolute;
   top: 0;
@@ -11,17 +11,39 @@
   background-size: auto 100%;
 }
 
-@media (max-width:@break-point-medium) and (min-width:@break-point-small) {
+@media (max-width:@break-point-medium) and (min-width: @break-point-small-bg) {
   .l-wrapper {
     background: url('../images/bg_960.jpg') top center no-repeat;
     background-size: auto auto;
   }
 }
 
-@media (max-width:@break-point-small)  {
+@media (max-width:(@break-point-small*2))  {
+  .l-wrapper {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: @break-point-small-bg)  {
   .l-wrapper {
     background: url('../images/bg_480.jpg') top center no-repeat;
     background-size: auto auto;
+  }
+}
+
+.l-primary-content {
+  flex: 7;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  min-width: @break-point-small;
+  position: relative;
+  background-color: @primary-background;
+
+}
+
+@media (max-width:(@break-point-small*2))  {
+  .l-primary-content {
+    flex: 7;
   }
 }
 
@@ -29,25 +51,27 @@
   flex: 3;
   overflow-x: hidden;
   overflow-y: scroll;
-  min-width: 300px;
+  min-width: @break-point-small;
   background-color: @secondary-background;
   display: flex;
   flex-flow: row wrap;
   flex-direction: column;
 }
 
-.l-primary-content {
-  flex: 7;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  min-width: 300px;
-  position: relative;
-  background-color: @primary-background;
-
+@media (max-width:(@break-point-small*2))  {
+  .l-secondary-content {
+    flex: 1;
+  }
 }
 
 .l-menu {
   flex: 9;
+}
+
+@media (max-width:(@break-point-small*2))  {
+  .l-menu_collapsed {
+    display: none;
+  }
 }
 
 .l-controls {

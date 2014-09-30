@@ -1,13 +1,22 @@
 @import "../core_styles/base.less";
 
-@control-size: 2em;
-
 .audio-control {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+@media (max-width:(@break-point-small*2))  {
+  .audio-control {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.audio-track {
+  width: 100%;
 }
 
 .audio-track__controls {
@@ -22,7 +31,7 @@
   background-color: @primary-color;
   color: @inverse-color;
   height: @control-size;
-  width: @control-size;
+  min-width: @control-size;
   text-align: center;
   margin: 0 @gutter;
   line-height: @control-size;
@@ -78,7 +87,7 @@
 }
 
 
-@media (max-width:@break-point-small)  {
+@media (max-width:(@break-point-small*2))  {
   .audio-track__control_conditional{
     visibility: visible;
   }
