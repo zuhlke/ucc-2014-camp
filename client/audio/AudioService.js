@@ -5,14 +5,18 @@ myapp.factory('audioService', function ($window, $q) {
   var context = new AudioContext();
   var currentPlayingSource;
   var currentTrack;
+  var gainNode = context.createGain();
+
+
 
   var audioService = {};
-  audioService.play = function (newBuffer) {
+
+  audioService.setVolume = function(value) {
+    gainNode.gain.value = value;
+  };
+
+  audioService.play = function () {
     if (!audioService.isPlaying) {
-      var buffer = (newBuffer) ? buffer : currentPlayingSource.buffer;
-      currentPlayingSource = context.createBufferSource();
-      currentPlayingSource.buffer = buffer;
-      currentPlayingSource.connect(context.destination);
       currentPlayingSource.start(0);
       audioService.isPlaying = true;
     }
@@ -27,12 +31,19 @@ myapp.factory('audioService', function ($window, $q) {
 
   audioService.loadAndPlay = function (file) {
     currentTrack = file;
+
     var p = $q.defer();
+
     var fileReader = new FileReader();
     fileReader.onload = function (e) {
       context.decodeAudioData(e.target.result, function (buffer) {
         audioService.stop();
-        audioService.play(buffer);
+        currentPlayingSource = context.createBufferSource();
+        currentPlayingSource.buffer = buffer;
+        currentPlayingSource.connect(context.destination);
+        gainNode.connect(context.destination);
+        currentPlayingSource.connect(gainNode);
+        audioService.play();
         p.resolve();
       });
     };
