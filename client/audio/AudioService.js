@@ -1,4 +1,4 @@
-myapp.factory('audioService', function ($window, $q) {
+myapp.factory('audioService', function ($window, $q, webRTCService) {
 
   $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
 
@@ -7,8 +7,9 @@ myapp.factory('audioService', function ($window, $q) {
   var currentTrack;
 
   var audioService = {};
+
   audioService.play = function () {
-    if (!audioService.isPlaying) {
+    if (!audioService.isPlaying && currentPlayingSource) {
       currentPlayingSource.start(0);
       audioService.isPlaying = true;
     }
@@ -35,10 +36,26 @@ myapp.factory('audioService', function ($window, $q) {
         currentPlayingSource.connect(context.destination);
         audioService.play();
         p.resolve();
+        audioService.sendStream(buffer);
       });
     };
+
     fileReader.readAsArrayBuffer(file);
     return p.promise;
+  };
+
+  audioService.sendStream = function(stream) {
+    webRTCService.connect()
+      .then(function(id) {
+        console.log('My ID is:' + id);
+        return webRTCService.getPeers();
+      })
+      .then(function(result) {
+        _(result.data.peers).filter(function(p) { return p !== webRTCService.id(); }).first(function(peer) {
+          console.log('Sending stream to: ' + peer);
+          webRTCService.sendStream(peer, stream);
+        });
+      });
   };
 
   audioService.isPlaying = false;
