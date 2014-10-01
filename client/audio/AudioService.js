@@ -5,8 +5,16 @@ myapp.factory('audioService', function ($window, $q) {
   var context = new AudioContext();
   var currentPlayingSource;
   var currentTrack;
+  var gainNode = context.createGain();
+
+
 
   var audioService = {};
+
+  audioService.setVolume = function(value) {
+    gainNode.gain.value = value;
+  };
+
   audioService.play = function () {
     if (!audioService.isPlaying) {
       currentPlayingSource.start(0);
@@ -33,6 +41,8 @@ myapp.factory('audioService', function ($window, $q) {
         currentPlayingSource = context.createBufferSource();
         currentPlayingSource.buffer = buffer;
         currentPlayingSource.connect(context.destination);
+        gainNode.connect(context.destination);
+        currentPlayingSource.connect(gainNode);
         audioService.play();
         p.resolve();
       });
