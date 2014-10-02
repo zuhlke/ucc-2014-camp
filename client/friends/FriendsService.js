@@ -1,4 +1,4 @@
-myapp.factory('FriendsService', function($rootScope, $window, webRTCService, socketService) {
+myapp.factory('FriendsService', function($rootScope, webRTCService, socketService) {
   var friendsService = {}, socket = undefined;
   friendsService.friends = {};
 
