@@ -76,17 +76,16 @@
 
 @media (max-width:(@break-point-small*2))  {
   .l-secondary-content {
-    flex: 1;
+    flex: none;
+    height: 8em;
   }
-}
-
-.l-header {
-  flex: 1;
 }
 
 .l-menu {
   flex: 9;
-  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: column;
 }
 
 .l-menu-control {
@@ -114,11 +113,20 @@
 
   .l-menu-control {
     display: block;
-    flex: 1;
+    height: 40px;
   }
 }
 
-.l-controls {
+
+.l-menu-content {
+  display:flex;
+  flex-flow: row wrap;
+  flex-direction: column;
   flex: 1;
+}
+
+
+.l-controls {
   position: relative;
+  height: 8em;
 }
