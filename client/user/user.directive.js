@@ -1,4 +1,4 @@
-function userController() {
+function userController(webRTCService) {
     var _root = this;
 
     this.id = null;
@@ -10,6 +10,8 @@ function userController() {
     this.toggleEditMode = function () {
         if(_root.name.value) {
             _root.name.isInEditMode = !_root.name.isInEditMode;
+            webRTCService.setUsername(_root.name.value);
+            webRTCService.pushUsername();
         }
     }
 }

@@ -1,4 +1,4 @@
-myapp.controller('FriendsController', function(FriendsService) {
+myapp.controller('FriendsController', function(webRTCService) {
     var _root = this;
-    this.list = FriendsService.friends;
+    this.list = webRTCService.getPeers();
 });
