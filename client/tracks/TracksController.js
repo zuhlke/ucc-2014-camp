@@ -12,8 +12,7 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
 
   $scope.play = function (track) {
     _.debounce(function () {
-      audioService.loadAndPlay(track.file).then(function() {
-      });
+      audioService.loadAndPlay(track.file).then(function() {});
     }, 150)();
   };
 

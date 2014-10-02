@@ -5,8 +5,15 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
   var context = new AudioContext();
   var currentPlayingSource;
   var currentTrack;
+  var gainNode = context.createGain();
+
+
 
   var audioService = {};
+
+  audioService.setVolume = function(value) {
+    gainNode.gain.value = value;
+  };
 
   audioService.play = function () {
     if (!audioService.isPlaying && currentPlayingSource) {
@@ -35,6 +42,8 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
         currentPlayingSource = context.createBufferSource();
         currentPlayingSource.buffer = buffer;
         currentPlayingSource.connect(context.destination);
+        gainNode.connect(context.destination);
+        currentPlayingSource.connect(gainNode);
 
         var remote = context.createMediaStreamDestination();
 
