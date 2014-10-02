@@ -3,9 +3,6 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
   $scope.audioService = audioService;
 
   $scope.play = function () {
-    webRTCService.connect().then(function(id) {
-      console.log(id);
-    });
     _.debounce(function() { audioService.play(); $scope.$apply(); }, 150)();
   };
 

@@ -13,12 +13,6 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     }
 
     peer = new Peer({
-      /*config: {'iceServers': [
-        { url: 'stun1.l.google.com:19302' },
-        { url: 'stun2.l.google.com:19302' },
-        { url: 'stun3.l.google.com:19302' },
-        { url: 'stun4.l.google.com:19302' }
-      ]},*/
       host: $window.location.hostname,
       port: 9000
     });
@@ -29,18 +23,24 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
       $rootScope.$broadcast('webrtc:open', myPeerId);
     });
 
-    peer.on('connection', function (conn) {
-      conn.on('data', function (data) {
-        //$rootScope.$broadcast('webrtc:data', data);
+    peer.on('call', function(call) {
+      console.log('Received call:' + call);
+      call.answer();
+      call.on('stream', function (stream) {
+        console.log('Received stream:' + stream);
 
-        var context = new AudioContext();
-        var currentPlayingSource;
-        currentPlayingSource = context.createBufferSource();
-        currentPlayingSource.buffer = buffer;
-        currentPlayingSource.connect(context.destination);
-        currentPlayingSource.start(0);
+        //var audioCtx = new AudioContext();
+        //var source = audioCtx.createMediaStreamSource(stream);
+
+        var player = new Audio();
+        player.src = URL.createObjectURL(stream);
+        player.play();
 
       });
+    });
+
+    peer.on('error', function (err) {
+      console.log(err);
     });
 
     return deferred.promise;
@@ -62,11 +62,12 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
   };
 
   webRTCService.sendStream = function (peerId, stream) {
-    var conn = peer.connect(peerId);
-    conn.on('open', function () {
-      conn.send(stream);
-    });
+    peer.call(peerId, stream);
   };
+
+  webRTCService.connect().then(function (id) {
+    console.log(id);
+  });
 
   return webRTCService;
 

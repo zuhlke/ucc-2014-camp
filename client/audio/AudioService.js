@@ -31,12 +31,20 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
     fileReader.onload = function (e) {
       context.decodeAudioData(e.target.result, function (buffer) {
         audioService.stop();
+
         currentPlayingSource = context.createBufferSource();
         currentPlayingSource.buffer = buffer;
         currentPlayingSource.connect(context.destination);
+
+        var remote = context.createMediaStreamDestination();
+
+        currentPlayingSource.connect(remote);
+
         audioService.play();
+
         p.resolve();
-        audioService.sendStream(buffer);
+
+        audioService.sendStream(remote.stream);
       });
     };
 
@@ -44,18 +52,17 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
     return p.promise;
   };
 
-  audioService.sendStream = function(stream) {
-    webRTCService.connect()
-      .then(function(id) {
-        console.log('My ID is:' + id);
-        return webRTCService.getPeers();
+  audioService.sendStream = function (stream) {
+    webRTCService.getPeers()
+      .then(function (result) {
+        _(result.data.peers).filter(function (p) {
+          return p !== webRTCService.id();
       })
-      .then(function(result) {
-        _(result.data.peers).filter(function(p) { return p !== webRTCService.id(); }).first(function(peer) {
-          console.log('Sending stream to: ' + peer);
-          webRTCService.sendStream(peer, stream);
-        });
+      .first(function (peer) {
+        console.log('Sending stream to: ' + peer);
+        webRTCService.sendStream(peer, stream);
       });
+    });
   };
 
   audioService.isPlaying = false;
