@@ -4,13 +4,12 @@ function AudioPlayer($rootScope, $q, $window) {
 
     this.context = new AudioContext();
     this.track = undefined;
-    this._trackBuffer = undefined;
-    this._gainNode = this.context.createGain();
-    this._isPlaying = false;
+    this.source = undefined;
+    this.trackBuffer = undefined;
+    this.gainNode = undefined;
 
     this.rootScope = $rootScope;
     this.q = $q;
-
 }
 
 AudioPlayer.prototype.load = function (track) {
@@ -26,48 +25,55 @@ AudioPlayer.prototype.load = function (track) {
     fileReader.readAsArrayBuffer(track.file);
 
     this.rootScope.$broadcast('AudioPlayer.trackChanged', track);
-    this._trackBuffer = deferred.promise;
-
+    this.trackBuffer = deferred.promise;
 };
 
 AudioPlayer.prototype.play = function () {
+    var context = this.context;
+    var rootScope = this.rootScope;
+    var track = this.track;
+    var trackBuffer = this.trackBuffer;
 
-    this._trackBuffer.then(angular.bind(this, function (buffer) {
-        this._source = this.context.createBufferSource();
-        this._remote = this.context.createMediaStreamDestination();
-        this._source.buffer = buffer;
-        this._source.connect(this.context.destination);
-        this._gainNode.connect(this.context.destination);
-        this._source.connect(this._gainNode);
-        this._source.connect(this._remote);
-        this._source.start(0);
+    if (trackBuffer) {
+        trackBuffer.then(angular.bind(this, function (buffer) {
+            var source = context.createBufferSource();
+            var remote = context.createMediaStreamDestination();
+            var gainNode = context.createGain();
 
-        this._isPlaying = true;
+            source.buffer = buffer;
+            source.connect(context.destination);
+            gainNode.connect(context.destination);
+            source.connect(remote);
+            source.connect(gainNode);
+            source.start(0);
 
-        this.rootScope.$broadcast('AudioPlayer.isPlaying', {
-            isPlaying: this._isPlaying,
-            trackName: this.track.name,
-            stream: this._remote.stream
-        });
-    }));
+            rootScope.$broadcast('AudioPlayer.isPlaying', {
+                isPlaying: true,
+                trackName: track.name,
+                stream: remote.stream
+            });
 
+            this.source = source;
+            this.gainNode = gainNode;
+        }));
+    }
 };
 
 AudioPlayer.prototype.stop = function () {
-    this._source && this._source.stop();
-    this._isPlaying = false;
-    this.rootScope.$broadcast('AudioPlayer.isPlaying', {
-        isPlaying: this._isPlaying
-    });
+    if (this.source) {
+        this.source.stop();
+        this.rootScope.$broadcast('AudioPlayer.isPlaying', {
+            isPlaying: false
+        });
+    }
 };
 
 AudioPlayer.prototype.setVolume = function (value) {
-    if (this._gainNode) {
-        this._gainNode.gain.value = value;
+    if (this.gainNode) {
+        this.gainNode.gain.value = value;
         this.rootScope.$broadcast('AudioPlayer.volumeChanged', value);
     }
 };
 
-
-angular.module('myapp').service('audioPlayer', AudioPlayer);
-
+// .service calls 'new' on the passed in function
+angular.module('myapp.audio', []).service('audioPlayer', AudioPlayer);
