@@ -10,7 +10,6 @@ myapp.factory('AudioPlayer', function ($rootScope, $q, $window) {
     this._trackBuffer = this._load(track);
     this._gainNode = context.createGain();
     this._isPlaying = false;
-    $rootScope.$broadcast('AudioPlayer.trackChanged', track);
   };
 
   AudioPlayer.prototype._load = function(track) {
@@ -22,6 +21,8 @@ myapp.factory('AudioPlayer', function ($rootScope, $q, $window) {
       });
     };
     fileReader.readAsArrayBuffer(track.file);
+
+    $rootScope.$broadcast('AudioPlayer.trackChanged', track);
     return deferred.promise;
   };
 
@@ -60,7 +61,10 @@ myapp.factory('AudioPlayer', function ($rootScope, $q, $window) {
   };
 
   AudioPlayer.prototype.setVolume = function(value) {
-    this._gainNode.gain.value = value;
+    if (this._gainNode) {
+      this._gainNode.gain.value = value;
+      $rootScope.$broadcast('AudioPlayer.volumeChanged', value);
+    }
   };
 
   return AudioPlayer;
