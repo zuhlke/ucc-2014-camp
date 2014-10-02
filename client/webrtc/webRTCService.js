@@ -1,42 +1,67 @@
-myapp.factory('webRTCService', function ($window, $http, $q) {
+myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
 
   var peer;
   var myPeerId;
+  var webRTCService = {};
 
-  return {
+  webRTCService.connect = function () {
+    var deferred = $q.defer();
 
-    connect: function () {
-      var deferred = $q.defer();
-      peer = new Peer({host: $window.location.hostname, port: 9000 });
+    if (peer) {
+      deferred.resolve(myPeerId);
+      return deferred.promise;
+    }
 
-      peer.on('open', function (id) {
-        myPeerId = id;
-        deferred.resolve(myPeerId);
-      });
+    peer = new Peer({
+      host: $window.location.hostname,
+      port: 9000
+    });
 
-      peer.on('connection', function (conn) {
-        conn.on('data', function (data) {
-          console.log(data);
+    peer.on('open', function (id) {
+      myPeerId = id;
+      deferred.resolve(myPeerId);
+      $rootScope.$broadcast('webrtc:open', myPeerId);
+    });
+
+    peer.on('call', function(call) {
+      console.log('Received call:' + call);
+      console.log("received metadata: " + call.metadata.trackName);
+
+
+      call.answer();
+
+      call.on('stream', function (stream) {
+        $rootScope.$broadcast('webRTCService.streamReceived', {
+          trackName: call.metadata.trackName,
+          stream: stream
         });
       });
 
-      return deferred.promise;
-    },
+    });
 
-    id: function () {
-      return myPeerId;
-    },
+    peer.on('error', function (err) {
+      console.log(err);
+    });
 
-    getPeers: function () {
-      return $http.get("http://" + $window.location.hostname + ":9090");
-    },
+    return deferred.promise;
+  };
 
-    sendMessage: function (peerId, message) {
-      var conn = peer.connect(peerId);
-      conn.on('open', function () {
-        conn.send('hi from ' + navigator.userAgent);
-      });
-    }
-  }
+  webRTCService.id = function () {
+    return myPeerId;
+  };
+
+  webRTCService.getPeers = function () {
+    return $http.get("http://" + $window.location.hostname + ":9090");
+  };
+
+  webRTCService.sendStream = function (peerId, stream, trackName) {
+    peer.call(peerId, stream, { metadata: { trackName: trackName }});
+  };
+
+  webRTCService.connect().then(function (id) {
+    console.log(id);
+  });
+
+  return webRTCService;
 
 });

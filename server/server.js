@@ -3,6 +3,7 @@ var _ = require('lodash');
 var http = require('http');
 var PeerServer = require('peer').PeerServer;
 var server = new PeerServer({port: 9000 });
+
 var connectedPeers = [];
 
 server.on('connection', function (id) {

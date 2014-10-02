@@ -2,20 +2,9 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
 
   $scope.audioService = audioService;
 
+  $scope.currentTrackName = "";
+
   $scope.play = function () {
-
-    webRTCService.connect()
-      .then(function(id) {
-        console.log('My ID is: ' + id);
-        return webRTCService.getPeers();
-      })
-      .then(function(result) {
-        console.log('Available peers: ' + result.data);
-        _(result.data.peers).forEach(function(peer) {
-          webRTCService.sendMessage(peer, 'Hello');
-        });
-      });
-
     _.debounce(function() { audioService.play(); $scope.$apply(); }, 150)();
   };
 
@@ -23,5 +12,16 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
     _.debounce(function() { audioService.stop(); $scope.$apply(); }, 150)();
   };
 
+  $scope.$on('audioService.trackChanged', function(event, track) {
+    $scope.$apply(function() {
+      $scope.currentTrackName = track.name;
+    });
+  });
+
+  $scope.$on('webRTCService.streamReceived', function(event, received) {
+    $scope.$apply(function() {
+      $scope.currentTrackName = received.trackName;
+    });
+  });
 
 });

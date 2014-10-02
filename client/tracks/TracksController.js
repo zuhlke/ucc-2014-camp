@@ -5,14 +5,15 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
     _(files).forEach(function (file) {
       $scope.tracks.push({
         file: file,
-        name: file.name
+        name: file.name,
+        isPlaying: false
       });
     });
   });
 
-  $scope.play = function (track) {
+  $scope.select = function (track) {
     _.debounce(function () {
-      audioService.loadAndPlay(track.file).then(function() {});
+      audioService.load(track)
     }, 150)();
   };
 
@@ -21,5 +22,15 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
       return t === track;
     });
   };
+
+    $scope.$on('audioService.trackChanged', function(event, track) {
+        markCurrentTrack(track);
+    });
+
+  function markCurrentTrack (track) {
+     angular.forEach($scope.tracks, function(value, key) {
+        value.isPlaying = track.name === value.name;
+     });
+  }
 
 });

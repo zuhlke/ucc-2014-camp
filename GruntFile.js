@@ -72,7 +72,7 @@ module.exports = function (grunt) {
                             src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     }
                 },
-                src: [ 'client/**/*.js'],
+                src: [ 'client/*.js', 'client/**/*.js'],
                 dest: 'public/js/app.js'
             }
         },
