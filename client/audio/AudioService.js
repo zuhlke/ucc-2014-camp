@@ -5,7 +5,6 @@ myapp.factory('audioService', function ($rootScope, $log, AudioPlayer, webRTCSer
   var audioPlayer;
 
   audioService.selectTrack = function (track) {
-    $rootScope.$broadcast('audioService.trackChanged', track);
     audioPlayer = new AudioPlayer(track);
   };
 
