@@ -1,11 +1,14 @@
 @import "../core_styles/base.less";
 
+@progress-height: 5px;
+
 .audio-control {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  color: @primary-color;
 }
 
 @media (max-width:(@break-point-small*2))  {
@@ -95,10 +98,31 @@
   visibility: hidden;
 }
 
-
 @media (max-width:(@break-point-small*2))  {
   .audio-track__control_conditional{
     visibility: visible;
   }
 }
 
+.audio-track__name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 @gutter;
+  font-size: 0.8em;
+  height: 3em;
+  line-height: 3em;
+}
+
+.audio-track__progress-wrapper {
+  margin: @gutter @gutter (2*@gutter);
+  height: @progress-height;
+  background-color: @secondary-color;
+}
+
+.audio-track__progress {
+  height: @progress-height;
+  width: 50%;
+  background-color: @emphasis-color;
+}

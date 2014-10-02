@@ -35,3 +35,32 @@
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
+
+.accordion__bullet {
+  float: left;
+  position: relative;
+  height: 1em;
+  width: 1em;
+}
+
+.accordion__bullet-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.accordion__body_collapsed .accordion__bullet-icon:first-child {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  top: -1px;
+  left: -2px;
+}
+
+.accordion__bullet-icon:first-child, .accordion__body_collapsed .accordion__bullet-icon:first-child {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}

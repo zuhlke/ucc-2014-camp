@@ -6,7 +6,6 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
   var webRTCService = {};
 
   webRTCService.connect = function () {
-
     var deferred = $q.defer();
 
     if (peer) {
@@ -15,6 +14,13 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     }
 
     peer = new Peer({
+      config: {'iceServers': [
+        {url:'stun:stun.l.google.com:19302'},
+        {url:'stun:stun1.l.google.com:19302'},
+        {url:'stun:stun2.l.google.com:19302'},
+        {url:'stun:stun3.l.google.com:19302'},
+        {url:'stun:stun4.l.google.com:19302'}
+      ]},
       host: $window.location.hostname,
       port: 9000
     });
@@ -26,23 +32,21 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     });
 
     peer.on('call', function(call) {
-      console.log('Received call:' + call);
+      $log.debug('Received call:' + call);
+      $log.debug("Received metadata: " + call.metadata.trackName);
+
       call.answer();
+
       call.on('stream', function (stream) {
-        console.log('Received stream:' + stream);
-
-        //var audioCtx = new AudioContext();
-        //var source = audioCtx.createMediaStreamSource(stream);
-
-        var player = new Audio();
-        player.src = URL.createObjectURL(stream);
-        player.play();
-
+        $rootScope.$broadcast('webRTCService.streamReceived', {
+          trackName: call.metadata.trackName,
+          stream: stream
+        });
       });
     });
 
     peer.on('error', function (err) {
-      console.log(err);
+      $log.error(err);
     });
 
     return deferred.promise;
@@ -52,23 +56,12 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     return myPeerId;
   };
 
-  webRTCService.setPeers = function (peers) {
-    myPeers = peers;
-  };
-
   webRTCService.getPeers = function () {
     return myPeers;
   };
 
-  webRTCService.sendMessage = function (peerId, message) {
-    var conn = peer.connect(peerId);
-    conn.on('open', function () {
-      conn.send('hi from ' + navigator.userAgent);
-    });
-  };
-
-  webRTCService.sendStream = function (peerId, stream) {
-        //peer.call(friends[id], stream);
+  webRTCService.sendStream = function (peerId, stream, trackName) {
+    peer.call(peerId, stream, { metadata: { trackName: trackName }});
   };
 
   return webRTCService;

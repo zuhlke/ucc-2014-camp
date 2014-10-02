@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="vendor/components-font-awesome/css/font-awesome.css" />
     <!-- endbower -->
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/app.css"/>
     <title></title>
 </head>
 <body>
@@ -17,12 +17,26 @@
         <div class="l-menu">
             <div class="l-menu-content">
                 <div class="accordion" accordion>
-                    <section class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}">
-                        <header class="accordion__header" ng-click="accordion.show(0);">Playlists</header>
+                    <section class="accordion__body"
+                             ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}">
+                        <header class="accordion__header" ng-click="accordion.show(0);">
+                            <div class="accordion__bullet">
+                                <span class="accordion__bullet-icon"><i class="fa fa-minus"></i></span>
+                                <span class="accordion__bullet-icon"><i class="fa fa-minus"></i></span>
+                            </div>
+                            Playlists
+                        </header>
                         <div ng-include="'partials/playlists/playlists.html'"></div>
                     </section>
-                    <section class="accordion__body accordion__body_collapsed" ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}">
-                        <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
+                    <section class="accordion__body accordion__body_collapsed"
+                             ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}">
+                        <header class="accordion__header" ng-click="accordion.show(1);">
+                            <div class="accordion__bullet">
+                                <span class="accordion__bullet-icon"><i class="fa fa-minus"></i></span>
+                                <span class="accordion__bullet-icon"><i class="fa fa-minus"></i></span>
+                            </div>
+                            Friends
+                        </header>
                         <div ng-include="'partials/friendslist/friends.html'"></div>
                     </section>
                 </div>
