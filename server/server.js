@@ -13,14 +13,6 @@ var peerServerInstance = new PeerServer({port: 9000});
 // keeping track of peers
 var clientConnections = {};
 
-peerServerInstance.on('connection', function (id) {
-    //clientConnections[id] = null;
-});
-
-peerServerInstance.on('disconnect', function (id) {
-    //delete clientConnections[id];
-});
-
 dataServer.on('connection', function (socket) {
     socket.on('logon', function (clientID) {
         clientConnections[clientID] = socket;
@@ -29,7 +21,6 @@ dataServer.on('connection', function (socket) {
         socket.on('disconnect', function () {
             clientConnections[clientID] = null;
             updateFriends(clientID);
-            console.log('disconnecting ' + clientID);
         });
     });
 });

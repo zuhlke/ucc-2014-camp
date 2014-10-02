@@ -22,14 +22,11 @@ myapp.factory('audioService', function ($rootScope, $log, AudioPlayer, webRTCSer
 
   $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
     if (audio.isPlaying) {
-      webRTCService.getPeers().then(function (result) {
-          _(result.data.peers)
-            .filter(function (p) { return p !== webRTCService.id(); })
-            .first(function (peer) {
-              $log.debug('Sending stream to: ' + peer);
-              webRTCService.sendStream(peer, audio.stream, audio.trackName);
-            });
-      });
+      var peers = webRTCService.getPeers();
+        if(peers.length > 0) {
+          $log.debug('Sending stream to: ' + peers[0]);
+          webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
+        }
     }
   });
 
