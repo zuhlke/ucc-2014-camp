@@ -73,5 +73,11 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
 
   audioService.isPlaying = false;
 
+  $rootScope.$on('webRTCService.streamReceived', function(event, received) {
+    var player = new Audio();
+    player.src = URL.createObjectURL(received.stream);
+    player.play();
+  });
+
   return audioService;
 });

@@ -27,14 +27,14 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
       console.log('Received call:' + call);
       console.log("received metadata: " + call.metadata.trackName);
 
-      $rootScope.$broadcast('webRTCService.streamReceived', call.metadata.trackName);
 
       call.answer();
 
       call.on('stream', function (stream) {
-        var player = new Audio();
-        player.src = URL.createObjectURL(stream);
-        player.play();
+        $rootScope.$broadcast('webRTCService.streamReceived', {
+          trackName: call.metadata.trackName,
+          stream: stream
+        });
       });
 
     });
