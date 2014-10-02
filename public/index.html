@@ -16,10 +16,14 @@
         <div class="l-menu">
             <div class="l-menu-content">
                 <div class="accordion" accordion>
-                    <header class="accordion__header" ng-click="accordion.show(0);">Playlists</header>
-                    <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}" ng-include="'partials/playlists/playlists.html'"></div>
-                    <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
-                    <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}"></div>
+                    <section class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}">
+                        <header class="accordion__header" ng-click="accordion.show(0);">Playlists</header>
+                        <div ng-include="'partials/playlists/playlists.html'"></div>
+                    </section>
+                    <section class="accordion__body accordion__body_collapsed" ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}">
+                        <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
+                        <div></div>
+                    </section>
                 </div>
             </div>
             <div class="l-menu-control" ng-include="'../client/menu-closer/menu-closer.html'">
