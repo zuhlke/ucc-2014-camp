@@ -1,4 +1,4 @@
-myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
+myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
 
   var peer;
   var myPeerId;
