@@ -1,4 +1,4 @@
-myapp.factory('FriendsService', function(webRTCService, socketService, $rootScope) {
+myapp.factory('FriendsService', function($rootScope, $window, webRTCService, socketService) {
   var friendsService = {}, socket = undefined;
   friendsService.friends = {};
 
@@ -20,7 +20,7 @@ myapp.factory('FriendsService', function(webRTCService, socketService, $rootScop
 myapp.factory('socketService', function() {
   var socket = {};
   socket.connect = function () {
-      return io('http://localhost:9090');
+      return io('http://' + $window.location.hostname + ':9090');
   };
   return socket;
 });
