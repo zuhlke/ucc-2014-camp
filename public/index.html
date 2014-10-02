@@ -22,7 +22,7 @@
                     </section>
                     <section class="accordion__body accordion__body_collapsed" ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}">
                         <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
-                        <div></div>
+                        <div ng-include="'partials/friendslist/friends.html'"></div>
                     </section>
                 </div>
             </div>
