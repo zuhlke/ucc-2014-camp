@@ -1,6 +1,6 @@
 <div ng-controller="AudioControlsController" class="audio-control">
     <div class="audio-track">
-        <p style="color: white;">{{currentTrackName}}</p>
+        <div class="audio-track__name" ng-bind="currentTrackName"> </div>
         <div class="audio-track__progress"></div>
         <ul class="audio-track__controls">
             <li class="audio-track__control audio-track__control_conditional audio-track__control_secondary" menu-trigger>
