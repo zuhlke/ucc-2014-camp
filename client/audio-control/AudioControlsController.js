@@ -10,7 +10,7 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
     _.debounce(function() { audioService.stop(); $scope.$apply(); }, 150)();
   };
 
-  $scope.$on('audioService.trackChanged', function(event, track) {
+  $scope.$on('AudioPlayer.trackChanged', function(event, track) {
     $scope.$apply(function() {
       $scope.currentTrackName = track.name;
     });

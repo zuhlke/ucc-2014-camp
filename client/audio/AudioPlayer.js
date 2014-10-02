@@ -10,6 +10,7 @@ myapp.factory('AudioPlayer', function ($rootScope, $q, $window) {
     this._trackBuffer = this._load(track);
     this._gainNode = context.createGain();
     this._isPlaying = false;
+    $rootScope.$broadcast('AudioPlayer.trackChanged', track);
   };
 
   AudioPlayer.prototype._load = function(track) {
