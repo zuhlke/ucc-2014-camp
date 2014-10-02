@@ -1,4 +1,4 @@
-myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
+myapp.factory('webRTCService', function ($window, $http, $q, $log, $rootScope) {
 
   var peer;
   var myPeerId;
@@ -24,9 +24,8 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     });
 
     peer.on('call', function(call) {
-      console.log('Received call:' + call);
-      console.log("received metadata: " + call.metadata.trackName);
-
+      $log.debug('Received call:' + call);
+      $log.debug("received metadata: " + call.metadata.trackName);
 
       call.answer();
 
@@ -36,11 +35,10 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
           stream: stream
         });
       });
-
     });
 
     peer.on('error', function (err) {
-      console.log(err);
+      $log.error(err);
     });
 
     return deferred.promise;
@@ -59,7 +57,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
   };
 
   webRTCService.connect().then(function (id) {
-    console.log(id);
+    $log.debug(id);
   });
 
   return webRTCService;

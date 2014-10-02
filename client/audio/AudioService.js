@@ -1,4 +1,4 @@
-myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) {
+myapp.factory('audioService', function ($rootScope, $window, $q, $log, webRTCService) {
 
   $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
 
@@ -9,6 +9,8 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
   var gainNode = context.createGain();
 
   var audioService = {};
+
+  audioService.isPlaying = false;
 
   audioService.setVolume = function(value) {
     gainNode.gain.value = value;
@@ -27,6 +29,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
 
         currentPlayingSource.connect(remote);
         audioService.play();
+
         audioService.sendStream(remote.stream);
         currentPlayingSource.start(0);
       });
@@ -37,6 +40,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
     if (audioService.isPlaying) {
       audioService.isPlaying = false;
     }
+
     if (currentPlayingSource) {
       currentPlayingSource.stop();
       currentPlayingSource = false
@@ -44,7 +48,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
   };
 
   audioService.load = function(track) {
-    console.log("loading track " + track);
+    $log.debug("Loading track " + track);
     $rootScope.$broadcast('audioService.trackChanged', track);
     currentTrackName = track.name;
     var deferred = $q.defer();
@@ -65,13 +69,11 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
           return p !== webRTCService.id();
       })
       .first(function (peer) {
-        console.log('Sending stream to: ' + peer);
+        $log.debug('Sending stream to: ' + peer);
         webRTCService.sendStream(peer, stream, currentTrackName);
       });
     });
   };
-
-  audioService.isPlaying = false;
 
   $rootScope.$on('webRTCService.streamReceived', function(event, received) {
     var player = new Audio();
