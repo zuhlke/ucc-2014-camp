@@ -1,4 +1,4 @@
-myapp.factory('audioService', function ($window, $q, webRTCService) {
+myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) {
 
   $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
 
@@ -17,13 +17,13 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
     if (!audioService.isPlaying) {
       audioService.isPlaying = true;
       currentBuffer.then(function (buffer) {
+        var remote = context.createMediaStreamDestination();
         currentPlayingSource = context.createBufferSource();
         currentPlayingSource.buffer = buffer;
         currentPlayingSource.connect(context.destination);
         gainNode.connect(context.destination);
         currentPlayingSource.connect(gainNode);
 
-        var remote = context.createMediaStreamDestination();
         currentPlayingSource.connect(remote);
         audioService.play();
         audioService.sendStream(remote.stream);
@@ -44,6 +44,7 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
 
   audioService.load = function(track) {
     console.log("loading track " + track);
+    $rootScope.$broadcast('audioService.trackChanged', track);
     var deferred = $q.defer();
     currentBuffer = deferred.promise;
     var fileReader = new FileReader();
