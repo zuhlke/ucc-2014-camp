@@ -1,5 +1,7 @@
 @import "../core_styles/base.less";
 
+@progress-height: 5px;
+
 .audio-control {
   position: absolute;
   top: 0;
@@ -111,4 +113,17 @@
   font-size: 0.8em;
   height: 3em;
   line-height: 3em;
+}
+
+.audio-track__progress-wrapper {
+  cursor: pointer;
+  margin: @gutter @gutter (2*@gutter);
+  height: @progress-height;
+  background-color: @secondary-color;
+}
+
+.audio-track__progress {
+  height: @progress-height;
+  background-color: @emphasis-color;
+  width: 0;
 }

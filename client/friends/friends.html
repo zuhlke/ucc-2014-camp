@@ -1,5 +1,5 @@
 <ul class="friends" ng-controller="FriendsController as friends">
-    <li class="friends__friend" ng-repeat="friend in friends.list">
-        <span class="friends__friend-name">{{friend.name}}</span>
+    <li class="friends__friend" ng-repeat="friend in friends.list.value">
+        <span class="friends__friend-name">{{friend}}</span>
     </li>
 </ul>

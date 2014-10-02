@@ -1,79 +1,36 @@
-myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) {
-
-  $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
-
-  var context = new AudioContext();
-  var currentPlayingSource;
-  var currentBuffer;
-  var currentTrackName;
-  var gainNode = context.createGain();
+myapp.factory('audioService', function ($rootScope, $log, AudioPlayer, webRTCService) {
 
   var audioService = {};
 
-  audioService.setVolume = function(value) {
-    gainNode.gain.value = value;
+  var audioPlayer;
+
+  audioService.selectTrack = function (track) {
+    audioPlayer = new AudioPlayer(track);
   };
 
   audioService.play = function () {
-    if (!audioService.isPlaying) {
-      audioService.isPlaying = true;
-      currentBuffer.then(function (buffer) {
-        var remote = context.createMediaStreamDestination();
-        currentPlayingSource = context.createBufferSource();
-        currentPlayingSource.buffer = buffer;
-        currentPlayingSource.connect(context.destination);
-        gainNode.connect(context.destination);
-        currentPlayingSource.connect(gainNode);
-
-        currentPlayingSource.connect(remote);
-        audioService.play();
-        audioService.sendStream(remote.stream);
-        currentPlayingSource.start(0);
-      });
-    }
+    audioPlayer && audioPlayer.play();
   };
 
   audioService.stop = function () {
-    if (audioService.isPlaying) {
-      audioService.isPlaying = false;
+    audioPlayer && audioPlayer.stop();
+  };
+
+  audioService.setVolume = function (value) {
+    audioPlayer && audioPlayer.setVolume(value);
+  };
+
+  $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
+    if (audio.isPlaying) {
+      var peers = webRTCService.getPeers();
+        if(peers.length > 0) {
+          $log.debug('Sending stream to: ' + peers[0]);
+          webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
+        }
     }
-    if (currentPlayingSource) {
-      currentPlayingSource.stop();
-      currentPlayingSource = false
-    }
-  };
+  });
 
-  audioService.load = function(track) {
-    console.log("loading track " + track);
-    $rootScope.$broadcast('audioService.trackChanged', track);
-    currentTrackName = track.name;
-    var deferred = $q.defer();
-    currentBuffer = deferred.promise;
-    var fileReader = new FileReader();
-    fileReader.onload = function (e) {
-      context.decodeAudioData(e.target.result, function (buffer) {
-        deferred.resolve(buffer);
-      });
-    };
-    fileReader.readAsArrayBuffer(track.file);
-  };
-
-  audioService.sendStream = function (stream) {
-    webRTCService.getPeers()
-      .then(function (result) {
-        _(result.data.peers).filter(function (p) {
-          return p !== webRTCService.id();
-      })
-      .first(function (peer) {
-        console.log('Sending stream to: ' + peer);
-        webRTCService.sendStream(peer, stream, currentTrackName);
-      });
-    });
-  };
-
-  audioService.isPlaying = false;
-
-  $rootScope.$on('webRTCService.streamReceived', function(event, received) {
+  $rootScope.$on('webRTCService.streamReceived', function (event, received) {
     var player = new Audio();
     player.src = URL.createObjectURL(received.stream);
     player.play();

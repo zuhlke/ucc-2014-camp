@@ -12,25 +12,17 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
   });
 
   $scope.select = function (track) {
-    _.debounce(function () {
-      audioService.load(track)
-    }, 150)();
+    _.debounce(function () { audioService.selectTrack(track) }, 150)();
   };
 
   $scope.removeTrack = function (track) {
-    _($scope.tracks).remove(function (t) {
-      return t === track;
-    });
+    _($scope.tracks).remove(function (t) { return t === track; });
   };
 
-    $scope.$on('audioService.trackChanged', function(event, track) {
-        markCurrentTrack(track);
+  $scope.$on('audioService.trackChanged', function (event, track) {
+    angular.forEach($scope.tracks, function (value, key) {
+      value.isPlaying = track.name === value.name;
     });
-
-  function markCurrentTrack (track) {
-     angular.forEach($scope.tracks, function(value, key) {
-        value.isPlaying = track.name === value.name;
-     });
-  }
+  });
 
 });

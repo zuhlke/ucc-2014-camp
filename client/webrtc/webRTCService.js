@@ -1,7 +1,8 @@
-myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
+myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
 
   var peer;
   var myPeerId;
+  var myPeers;
   var webRTCService = {};
 
   webRTCService.connect = function () {
@@ -13,6 +14,13 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     }
 
     peer = new Peer({
+      config: {'iceServers': [
+        {url:'stun:stun.l.google.com:19302'},
+        {url:'stun:stun1.l.google.com:19302'},
+        {url:'stun:stun2.l.google.com:19302'},
+        {url:'stun:stun3.l.google.com:19302'},
+        {url:'stun:stun4.l.google.com:19302'}
+      ]},
       host: $window.location.hostname,
       port: 9000
     });
@@ -24,9 +32,8 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     });
 
     peer.on('call', function(call) {
-      console.log('Received call:' + call);
-      console.log("received metadata: " + call.metadata.trackName);
-
+      $log.debug('Received call:' + call);
+      $log.debug("Received metadata: " + call.metadata.trackName);
 
       call.answer();
 
@@ -36,11 +43,10 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
           stream: stream
         });
       });
-
     });
 
     peer.on('error', function (err) {
-      console.log(err);
+      $log.error(err);
     });
 
     return deferred.promise;
@@ -50,18 +56,17 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     return myPeerId;
   };
 
+  webRTCService.setPeers = function (peers) {
+    myPeers = peers;
+  };
+
   webRTCService.getPeers = function () {
-    return $http.get("http://" + $window.location.hostname + ":9090");
+    return myPeers;
   };
 
   webRTCService.sendStream = function (peerId, stream, trackName) {
     peer.call(peerId, stream, { metadata: { trackName: trackName }});
   };
 
-  webRTCService.connect().then(function (id) {
-    console.log(id);
-  });
-
   return webRTCService;
-
 });

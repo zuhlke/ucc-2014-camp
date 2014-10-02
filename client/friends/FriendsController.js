@@ -1,8 +1,4 @@
-myapp.controller('FriendsController', function() {
+myapp.controller('FriendsController', function(FriendsService) {
     var _root = this;
-
-    this.list = [
-        {'name':'Kevin aka ToastShaman' },
-        {'name':'Neil' }
-    ];
+    this.list = FriendsService.friends;
 });

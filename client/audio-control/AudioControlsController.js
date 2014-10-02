@@ -1,7 +1,5 @@
 myapp.controller('AudioControlsController', function ($scope, audioService, webRTCService) {
 
-  $scope.audioService = audioService;
-
   $scope.currentTrackName = "";
 
   $scope.play = function () {
@@ -12,7 +10,7 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
     _.debounce(function() { audioService.stop(); $scope.$apply(); }, 150)();
   };
 
-  $scope.$on('audioService.trackChanged', function(event, track) {
+  $scope.$on('AudioPlayer.trackChanged', function(event, track) {
     $scope.$apply(function() {
       $scope.currentTrackName = track.name;
     });
@@ -22,6 +20,10 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
     $scope.$apply(function() {
       $scope.currentTrackName = received.trackName;
     });
+  });
+
+  $scope.$on('AudioPlayer.isPlaying', function(event, audio) {
+    $scope.isPlaying = audio.isPlaying;
   });
 
 });
