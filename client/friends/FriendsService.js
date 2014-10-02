@@ -1,4 +1,4 @@
-myapp.factory('FriendsService', function($rootScope, webRTCService, socketService) {
+myapp.factory('FriendsService', function($rootScope, $log, webRTCService, socketService) {
   var friendsService = {}, socket = undefined;
   friendsService.friends = {};
 
@@ -6,8 +6,9 @@ myapp.factory('FriendsService', function($rootScope, webRTCService, socketServic
     socket = socketService.connect();
     socket.emit('logon', webRTCService.id());
       socket.on('friends-update', function (newFriends) {
-          console.log('friends update received');
-          console.log(newFriends);
+          $log.debug('Friends update received');
+          $log.debug(newFriends);
+
           friendsService.friends.value = newFriends;
           webRTCService.setPeers(newFriends);
           $rootScope.$apply();
