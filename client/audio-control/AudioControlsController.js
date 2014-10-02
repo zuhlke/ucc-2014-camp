@@ -22,10 +22,8 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
     });
   });
 
-  $scope.$on('audioService.isPlaying', function(event, isPlaying) {
-    $scope.$apply(function() {
-      $scope.isPlaying = isPlaying;
-    });
+  $scope.$on('AudioPlayer.isPlaying', function(event, audio) {
+    $scope.isPlaying = audio.isPlaying;
   });
 
 });
