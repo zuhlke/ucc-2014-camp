@@ -1,20 +1,25 @@
-myapp.factory('FriendsService', function(socket, webRTCService, $rootScope) {
-  var friendsService = {};
+myapp.factory('FriendsService', function(webRTCService, socketService, $rootScope) {
+  var friendsService = {}, socket = undefined;
   friendsService.friends = {};
 
-  webRTCService.connect().then(function () {
-    socket.emit('logon', webRTCService.id(), '');
+  webRTCService.connect().then(function(id) {
+    socket = socketService.connect();
+    socket.emit('logon', webRTCService.id());
+      socket.on('friends-update', function (newFriends) {
+          console.log('friends update received');
+          console.log(newFriends);
+          friendsService.friends.value = newFriends;
+          webRTCService.setPeers(newFriends);
+          $rootScope.$apply();
+      });
   });
-
-  socket.on('friends-update', function (newFriends) {
-    friendsService.friends.value = newFriends;
-    console.log(newFriends);
-    $rootScope.$apply();
-  });
-
   return friendsService;
 });
 
-myapp.factory('socket', function() {
-  return io('http://localhost:9090');
+myapp.factory('socketService', function() {
+  var socket = {};
+  socket.connect = function () {
+      return io('http://localhost:9090');
+  };
+  return socket;
 });

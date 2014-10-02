@@ -2,9 +2,11 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
 
   var peer;
   var myPeerId;
+  var myPeers;
   var webRTCService = {};
 
   webRTCService.connect = function () {
+
     var deferred = $q.defer();
 
     if (peer) {
@@ -50,8 +52,12 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     return myPeerId;
   };
 
+  webRTCService.setPeers = function (peers) {
+    myPeers = peers;
+  };
+
   webRTCService.getPeers = function () {
-    return $http.get("http://" + $window.location.hostname + ":9090");
+    return myPeers;
   };
 
   webRTCService.sendMessage = function (peerId, message) {
@@ -62,12 +68,8 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
   };
 
   webRTCService.sendStream = function (peerId, stream) {
-    peer.call(peerId, stream);
+        //peer.call(friends[id], stream);
   };
-
-  webRTCService.connect().then(function (id) {
-    console.log(id);
-  });
 
   return webRTCService;
 
