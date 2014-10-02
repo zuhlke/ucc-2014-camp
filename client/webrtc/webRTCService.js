@@ -28,10 +28,6 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
       call.answer();
       call.on('stream', function (stream) {
         console.log('Received stream:' + stream);
-
-        //var audioCtx = new AudioContext();
-        //var source = audioCtx.createMediaStreamSource(stream);
-
         var player = new Audio();
         player.src = URL.createObjectURL(stream);
         player.play();

@@ -4,10 +4,8 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
 
   var context = new AudioContext();
   var currentPlayingSource;
-  var currentTrack;
+  var currentBuffer;
   var gainNode = context.createGain();
-
-
 
   var audioService = {};
 
@@ -16,29 +14,9 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
   };
 
   audioService.play = function () {
-    if (!audioService.isPlaying && currentPlayingSource) {
-      currentPlayingSource.start(0);
+    if (!audioService.isPlaying) {
       audioService.isPlaying = true;
-    }
-  };
-
-  audioService.stop = function () {
-    if (audioService.isPlaying && currentPlayingSource) {
-      currentPlayingSource.stop();
-      audioService.isPlaying = false;
-    }
-  };
-
-  audioService.loadAndPlay = function (file) {
-    currentTrack = file;
-
-    var p = $q.defer();
-
-    var fileReader = new FileReader();
-    fileReader.onload = function (e) {
-      context.decodeAudioData(e.target.result, function (buffer) {
-        audioService.stop();
-
+      currentBuffer.then(function (buffer) {
         currentPlayingSource = context.createBufferSource();
         currentPlayingSource.buffer = buffer;
         currentPlayingSource.connect(context.destination);
@@ -46,19 +24,35 @@ myapp.factory('audioService', function ($window, $q, webRTCService) {
         currentPlayingSource.connect(gainNode);
 
         var remote = context.createMediaStreamDestination();
-
         currentPlayingSource.connect(remote);
-
         audioService.play();
-
-        p.resolve();
-
         audioService.sendStream(remote.stream);
+        currentPlayingSource.start(0);
+      });
+    }
+  };
+
+  audioService.stop = function () {
+    if (audioService.isPlaying) {
+      audioService.isPlaying = false;
+    }
+    if (currentPlayingSource) {
+      currentPlayingSource.stop();
+      currentPlayingSource = false
+    }
+  };
+
+  audioService.load = function(track) {
+    console.log("loading track " + track);
+    var deferred = $q.defer();
+    currentBuffer = deferred.promise;
+    var fileReader = new FileReader();
+    fileReader.onload = function (e) {
+      context.decodeAudioData(e.target.result, function (buffer) {
+        deferred.resolve(buffer);
       });
     };
-
-    fileReader.readAsArrayBuffer(file);
-    return p.promise;
+    fileReader.readAsArrayBuffer(track.file);
   };
 
   audioService.sendStream = function (stream) {

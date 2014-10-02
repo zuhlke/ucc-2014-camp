@@ -10,9 +10,9 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
     });
   });
 
-  $scope.play = function (track) {
+  $scope.select = function (track) {
     _.debounce(function () {
-      audioService.loadAndPlay(track.file).then(function() {});
+      audioService.load(track)
     }, 150)();
   };
 
