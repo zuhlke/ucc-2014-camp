@@ -29,14 +29,15 @@ dataServer.on('connection', function (socket) {
         socket.on('disconnect', function () {
             clientConnections[clientID] = null;
             updateFriends(clientID);
+            console.log('disconnecting ' + clientID);
         });
     });
 });
 
 function updateFriends (user) {
     for(var clientID in clientConnections){
-        var friends = getFriends(clientID);
         if (clientConnections[clientID]) {
+            var friends = getFriends(clientID);
             clientConnections[clientID].emit('friends-update', friends);
         }
     }

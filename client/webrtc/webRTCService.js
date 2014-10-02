@@ -56,6 +56,10 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     return myPeerId;
   };
 
+  webRTCService.setPeers = function (peers) {
+    myPeers = peers;
+  };
+
   webRTCService.getPeers = function () {
     return myPeers;
   };
@@ -65,5 +69,4 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
   };
 
   return webRTCService;
-
 });

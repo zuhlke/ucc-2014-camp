@@ -13,6 +13,7 @@ myapp.factory('FriendsService', function(webRTCService, socketService, $rootScop
           $rootScope.$apply();
       });
   });
+
   return friendsService;
 });
 
