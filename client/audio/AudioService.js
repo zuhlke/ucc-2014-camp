@@ -5,6 +5,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
   var context = new AudioContext();
   var currentPlayingSource;
   var currentBuffer;
+  var currentTrackName;
   var gainNode = context.createGain();
 
   var audioService = {};
@@ -45,6 +46,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
   audioService.load = function(track) {
     console.log("loading track " + track);
     $rootScope.$broadcast('audioService.trackChanged', track);
+    currentTrackName = track.name;
     var deferred = $q.defer();
     currentBuffer = deferred.promise;
     var fileReader = new FileReader();
@@ -64,7 +66,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, webRTCService) 
       })
       .first(function (peer) {
         console.log('Sending stream to: ' + peer);
-        webRTCService.sendStream(peer, stream);
+        webRTCService.sendStream(peer, stream, currentTrackName);
       });
     });
   };

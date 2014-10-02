@@ -25,14 +25,18 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
 
     peer.on('call', function(call) {
       console.log('Received call:' + call);
+      console.log("received metadata: " + call.metadata.trackName);
+
+      $rootScope.$broadcast('webRTCService.streamReceived', call.metadata.trackName);
+
       call.answer();
+
       call.on('stream', function (stream) {
-        console.log('Received stream:' + stream);
         var player = new Audio();
         player.src = URL.createObjectURL(stream);
         player.play();
-
       });
+
     });
 
     peer.on('error', function (err) {
@@ -50,15 +54,8 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope) {
     return $http.get("http://" + $window.location.hostname + ":9090");
   };
 
-  webRTCService.sendMessage = function (peerId, message) {
-    var conn = peer.connect(peerId);
-    conn.on('open', function () {
-      conn.send('hi from ' + navigator.userAgent);
-    });
-  };
-
-  webRTCService.sendStream = function (peerId, stream) {
-    peer.call(peerId, stream);
+  webRTCService.sendStream = function (peerId, stream, trackName) {
+    peer.call(peerId, stream, { metadata: { trackName: trackName }});
   };
 
   webRTCService.connect().then(function (id) {
