@@ -17,11 +17,11 @@
             <div class="l-menu-content" accordion>
                 <header class="accordion__header" ng-click="accordion.show(0);">Playlists</header>
                 <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visbibility[0].collapsed}" ng-include="'partials/playlists/playlists.html'"></div>
-                <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
+                <header class="accordion__header" ng-click="accordion.show(1);" ng-controller="FriendsCtrl">Friends {{ friends.value }}</header>
                 <div ng-class="{'accordion__body_collapsed' : accordion.visbibility[1].collapsed}"></div>
             </div>
             <div class="l-menu-control" ng-include="'../client/menu-closer/menu-closer.html'">
-            </div>  
+            </div>
         </div>
         <div class="l-controls" ng-include="'partials/audio-control/audio-control.html'"></div>
     </div>
@@ -36,5 +36,6 @@
 <script src="vendor/peerjs/peer.js"></script>
 <!-- endbower -->
 <script src="js/app.js"></script>
+<script src="http://localhost:9090/socket.io/socket.io.js"></script>
 </body>
 </html>
