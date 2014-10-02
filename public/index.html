@@ -17,9 +17,9 @@
             <div class="l-menu-content">
                 <div class="accordion" accordion>
                     <header class="accordion__header" ng-click="accordion.show(0);">Playlists</header>
-                    <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visbibility[0].collapsed}" ng-include="'partials/playlists/playlists.html'"></div>
+                    <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}" ng-include="'partials/playlists/playlists.html'"></div>
                     <header class="accordion__header" ng-click="accordion.show(1);">Friends</header>
-                    <div ng-class="{'accordion__body_collapsed' : accordion.visbibility[1].collapsed}"></div>
+                    <div class="accordion__body" ng-class="{'accordion__body_collapsed' : accordion.visibility[1].collapsed}"></div>
                 </div>
             </div>
             <div class="l-menu-control" ng-include="'../client/menu-closer/menu-closer.html'">
