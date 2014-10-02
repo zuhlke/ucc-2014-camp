@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var httpServer = require('http');
 httpServer.createServer();
 
@@ -6,26 +8,50 @@ var dataServer = require('socket.io')(httpServer).listen(9090);
 
 // p2p server
 var PeerServer = require('peer').PeerServer;
-var peerServerInstance = new PeerServer({port: 9000 });
+var peerServerInstance = new PeerServer({port: 9000});
 
 // keeping track of peers
-var connectedPeers = [];
+var clientConnections = {};
 
 peerServerInstance.on('connection', function (id) {
-  connectedPeers.push(id);
+  clientConnections[id] = {};
 });
 
 peerServerInstance.on('disconnect', function (id) {
-  _(connectedPeers).remove(function (t) {
-    return t === id;
-  });
+  delete clientConnections[id];
 });
 
 dataServer.on('connection', function (socket) {
-  socket.on('logon', function (data){
-    socket.emit('friends-update', connectedPeers);
+  socket.on('logon', function (clientID){
+    clientConnections[clientID] = socket;
+    updateFriends(clientID);
+
+    socket.on('disconnect', function () {
+      clientConnections[clientID] = null;
+      updateFriends(clientID);
+    });
   });
+
 });
+
+function updateFriends (user) {
+  for(var clientID in clientConnections){
+    var friends = getFriends(clientID);
+    if (clientConnections[clientID] !== null) {
+      clientConnections[clientID].emit('friends-update', friends);
+    }
+  }
+}
+
+function getFriends(user) {
+  var friends = [];
+  for(var clientID in clientConnections){
+    if (clientConnections[clientID] !== null && clientID !== user) {
+      friends.push(clientID);
+    }
+  }
+  return friends;
+}
 
 /*http.createServer(function (request, response) {
  response.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });

@@ -3,7 +3,7 @@ myapp.factory('FriendsService', function(socket, webRTCService, $rootScope) {
   friendsService.friends = {};
 
   webRTCService.connect().then(function () {
-    socket.emit('logon', webRTCService.id());
+    socket.emit('logon', webRTCService.id(), '');
   });
 
   socket.on('friends-update', function (newFriends) {
