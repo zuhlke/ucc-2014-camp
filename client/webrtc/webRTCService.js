@@ -32,7 +32,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $log, $rootScope) {
 
     peer.on('call', function(call) {
       $log.debug('Received call:' + call);
-      $log.debug("received metadata: " + call.metadata.trackName);
+      $log.debug("Received metadata: " + call.metadata.trackName);
 
       call.answer();
 

@@ -18,7 +18,10 @@ myapp.factory('audioService', function ($rootScope, $window, $q, $log, webRTCSer
 
   audioService.play = function () {
     if (!audioService.isPlaying) {
+
       audioService.isPlaying = true;
+      $rootScope.$broadcast('audioService.isPlaying', audioService.isPlaying);
+
       currentBuffer.then(function (buffer) {
         var remote = context.createMediaStreamDestination();
         currentPlayingSource = context.createBufferSource();
@@ -39,6 +42,7 @@ myapp.factory('audioService', function ($rootScope, $window, $q, $log, webRTCSer
   audioService.stop = function () {
     if (audioService.isPlaying) {
       audioService.isPlaying = false;
+      $rootScope.$broadcast('audioService.isPlaying', audioService.isPlaying);
     }
 
     if (currentPlayingSource) {
