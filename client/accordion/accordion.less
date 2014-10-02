@@ -20,11 +20,21 @@
 }
 
 .accordion__body {
+  display: block;
   width: 100%;
   flex-grow: 8;
+  height: auto;
 }
 
 .accordion__body_collapsed {
   display: none;
   height: 0;
+  overflow: hidden;
+}
+
+.accordion__body, .accordion__body_collapsed {
+  -webkit-transition: all 500ms ease-in-out;
+  -moz-transition: all 500ms ease-in-out;
+  -o-transition: all 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
