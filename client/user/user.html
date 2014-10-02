@@ -1,0 +1,9 @@
+<div class="user">
+    <input ng-model="user.name.value" ng-show="user.name.isInEditMode"
+           class="user__name-editable" placeholder="Enter your username" type="text"/>
+    <i ng-show="user.name.isInEditMode" ng-class="{'user__name-edit-action_disabled' : !user.name.value}" ng-click="user.toggleEditMode();"
+       class="user__name-edit-action fa fa-check"></i>
+    <span ng-bind="user.name.value" ng-hide="user.name.isInEditMode"
+          class="user__name-static"></span>
+    <i ng-hide="user.name.isInEditMode" class="user__name-edit-action fa fa-pencil" ng-click="user.toggleEditMode();"></i>
+</div>
