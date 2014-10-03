@@ -3,11 +3,13 @@ function AudioService($rootScope, $log, audioPlayer, webRTCService) {
 
     $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
         if (audio.isPlaying) {
-            var peers = webRTCService.getPeers();
+            $log.debug('Sending stream');
+            var peers = _(webRTCService.getPeers()).keys();
             webRTCService.pushTrack(audio.trackName);
-            if (peers.length > 0) {
-                $log.debug('Sending stream to: ' + peers[0]);
-                webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
+            if (!peers.isEmpty()) {
+                var chosenPeerId = peers.first();
+                $log.debug('Sending stream to: ' + chosenPeerId);
+                webRTCService.sendStream(chosenPeerId, audio.stream, audio.trackName);
             }
         }
     });
