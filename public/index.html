@@ -16,7 +16,7 @@
         <div class="l-menu">
             <div class="l-menu-content">
                 <div class="l-header" user></div>
-                <div class="accordion" accordion>
+                <div class="accordion" ng-controller="AccordionController as accordion">
                     <section class="accordion__body"
                              ng-class="{'accordion__body_collapsed' : accordion.visibility[0].collapsed}">
                         <header class="accordion__header" ng-click="accordion.show(0);">
