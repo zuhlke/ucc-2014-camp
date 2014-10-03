@@ -34,8 +34,8 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
             id3(file, function (err, tags) {
                 $log.debug("Loaded " + file.name + " tags " + JSON.stringify(tags));
                 var trackname = file.name;
-                if (tags.artist && tags.album && tags.v1.track && tags.title) {
-                    trackname = tags.artist + " - " + tags.album + " - " + tags.v1.track + ". " + tags.title;
+                if (tags.artist && tags.album && (tags.v1.track || tags.v2.track) && tags.title) {
+                    trackname = tags.artist + " - " + tags.album + " - " + (tags.v1.track || tags.v2.track) + ". " + tags.title;
                 }
                 var imageSource = "";
                 if (tags.v2.image.data) {
