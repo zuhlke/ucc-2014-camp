@@ -87,6 +87,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
         delete myPeers[peerId];
       }
     }
+    webRTCService.pushUsername();
   };
 
   webRTCService.getPeers = function () {
@@ -109,11 +110,14 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
     });
   };
 
-  function push (data) {
+  function push(data) {
     for (var id in myPeers) {
       var conn = myPeers[id].connection;
       $log.debug('pushed ' + data + ' to ' + id);
-      conn.send(data);
+      if (conn.open) conn.send(data);
+      else conn.on('open', function() {
+        conn.send(data);
+      });
       conn.on('error', function (msg) {
         $log.debug('error: ' + msg);
       });
