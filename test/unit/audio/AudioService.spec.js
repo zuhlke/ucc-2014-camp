@@ -5,18 +5,28 @@ describe("An AudioPlayer", function () {
     var webRTCService;
 
     var AudioContext;
+    var FileReader;
 
     beforeEach(module('myapp'));
 
     beforeEach(inject(function ($injector) {
-        window.AudioContext = function() {
+        window.AudioContext = function () {
         };
 
-        window.AudioContext.createBufferSource = function() {
+        window.AudioContext.createBufferSource = function () {
+        };
+
+        window.FileReader = function () {
+        };
+
+        window.FileReader.readAsArrayBuffer = function (track) {
         };
 
         AudioContext = spyOn(window, 'AudioContext');
         spyOn(AudioContext, 'createBufferSource');
+
+        FileReader = spyOn(window, 'FileReader');
+        spyOn(FileReader, 'readAsArrayBuffer');
 
         var rootScope = $injector.get('$rootScope');
         var log = $injector.get('$log');
@@ -28,15 +38,12 @@ describe("An AudioPlayer", function () {
     }));
 
     it('should play a track', function () {
-        var track = {
-            file: function() {
-                return 'BLOB';
-            }
-        };
+        var track = {file: 'BLOB'};
 
         audioService.selectTrack(track);
         audioService.play();
 
+        expect(FileReader.readAsArrayBuffer).toHaveBeenCalled();
         expect(AudioContext.createBufferSource).toHaveBeenCalled();
     });
 
