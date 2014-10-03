@@ -19,6 +19,7 @@ myapp.controller('AudioControlsController', function ($scope, audioService, webR
   $scope.$on('webRTCService.streamReceived', function(event, received) {
     $scope.$apply(function() {
       $scope.currentTrackName = received.trackName;
+      $scope.isPlaying = true;
     });
   });
 
