@@ -17,24 +17,23 @@ function AudioService($rootScope, $log, audioPlayer, webRTCService) {
         player.src = URL.createObjectURL(received.stream);
         player.play();
     });
-
-}
+};
 
 AudioService.prototype.selectTrack = function (track) {
     this.audioPlayer.load(track);
-}
+};
 
 AudioService.prototype.play = function () {
     this.audioPlayer.play();
-}
+};
 
 AudioService.prototype.stop = function() {
     this.audioPlayer.stop();
-}
+};
 
 AudioService.prototype.setVolume = function (value) {
     this.audioPlayer.setVolume(value);
-}
+};
 
 // .service calls 'new' on the passed in function
 angular.module('myapp').service('audioService', AudioService);

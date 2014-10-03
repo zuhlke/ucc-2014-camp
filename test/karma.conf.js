@@ -23,7 +23,8 @@ module.exports = function (config) {
             'public/vendor/jasmine-sinon/lib/jasmine-sinon.js',
             'public/vendor/bootstrap/dist/js/bootstrap.min.js',
             'public/i18n/angular-locale_en-gb.js',
-            'client/js/**/*.js',
+            'client/app.js',
+            'client/**/*.js',
             'test/unit/**/*.spec.js'
         ],
 
