@@ -6,7 +6,8 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
       $scope.tracks.push({
         file: file,
         name: file.name,
-        isPlaying: false
+        isPlaying: false,
+        isSelected: false
       });
     });
   });
@@ -16,7 +17,13 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
       audioService.selectTrack(track)
     }, 150)();
     angular.forEach($scope.tracks, function (value, key) {
-      value.isPlaying = track.name === value.name;
+      value.isSelected = track.name === value.name;
     });
   };
+
+  $scope.$on('AudioPlayer.isPlaying', function(event, audio) {
+    angular.forEach($scope.tracks, function (value, key) {
+      value.isPlaying = value.isSelected && audio.isPlaying;
+    });
+  });
 });

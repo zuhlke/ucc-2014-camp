@@ -1,6 +1,6 @@
 <ul class="track-list" ng-controller="TracksController" drag-and-drop>
     <li class="track-list__empty" ng-if="!tracks.length">Playlist is empty</li>
-    <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.isPlaying}" ng-repeat="track in tracks">
+    <li class="track-list__track" ng-class="{'track-list__track_selected' : track.isSelected, 'track-list__track_currently-playing' : track.isPlaying}" ng-repeat="track in tracks">
         <div class="track-list__track-name" ng-click="select(track)">{{track.name}}</div>
         <div class="track-list__track-play-icon">
             <i class="fa" ng-class="{'fa-volume-up' : track.isPlaying, 'track-list__track-play-icon__animated' : track.isPlaying, 'fa-play' : !track.isPlaying}"></i>
