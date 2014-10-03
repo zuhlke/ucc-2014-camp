@@ -1,6 +1,6 @@
 <ul class="friends" ng-controller="FriendsController as friends">
     <li class="friends__friend" ng-repeat="(key, val) in friends.list">
-        <div class="friends__friend-name" ng-click="friends.openStream(key)"> <i class="fa fa-user"></i> {{ val.username }}</div>
+        <div class="friends__friend-name" ng-click="friends.openStream(key)"><i class="fa fa-user"></i> {{ val.username }}</div>
         <div class="friends__track">{{ val.track }}</div>
     </li>
 </ul>
