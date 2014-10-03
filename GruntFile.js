@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build-watch', ['build', 'watch']);
 
-    grunt.registerTask('test-unit', ['clean:test', 'karma:unit', 'copy:coverageReport']);
+    grunt.registerTask('test-unit', ['clean:test', 'karma:unit']);
 
     grunt.registerTask('test-e2e', ['build', 'protractor:test']);
 
