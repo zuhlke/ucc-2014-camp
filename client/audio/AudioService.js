@@ -1,39 +1,41 @@
-myapp.factory('audioService', function ($rootScope, $log, audioPlayer, webRTCService) {
+function AudioService($rootScope, $log, audioPlayer, webRTCService) {
+    this.audioPlayer = audioPlayer;
 
-  var audioService = {};
+    $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
+        if (audio.isPlaying) {
+            var peers = webRTCService.getPeers();
+            webRTCService.pushTrack(audio.trackName);
+            if (peers.length > 0) {
+                $log.debug('Sending stream to: ' + peers[0]);
+                webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
+            }
+        }
+    });
 
-  audioService.selectTrack = function (track) {
-    audioPlayer.load(track);
-  };
+    $rootScope.$on('webRTCService.streamReceived', function (event, received) {
+        var player = new Audio();
+        player.src = URL.createObjectURL(received.stream);
+        player.play();
+    });
 
-  audioService.play = function () {
-    audioPlayer.play();
-  };
+}
 
-  audioService.stop = function () {
-    audioPlayer.stop();
-  };
+AudioService.prototype.selectTrack = function (track) {
+    this.audioPlayer.load(track);
+}
 
-  audioService.setVolume = function (value) {
-    audioPlayer.setVolume(value);
-  };
+AudioService.prototype.play = function () {
+    this.audioPlayer.play();
+}
 
-  $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
-    if (audio.isPlaying) {
-      var peers = webRTCService.getPeers();
-      webRTCService.pushTrack(audio.trackName);
-      if(peers.length > 0) {
-        $log.debug('Sending stream to: ' + peers[0]);
-        webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
-      }
-    }
-  });
+AudioService.prototype.stop = function() {
+    this.audioPlayer.stop();
+}
 
-  $rootScope.$on('webRTCService.streamReceived', function (event, received) {
-    var player = new Audio();
-    player.src = URL.createObjectURL(received.stream);
-    player.play();
-  });
+AudioService.prototype.setVolume = function (value) {
+    this.audioPlayer.setVolume(value);
+}
 
-  return audioService;
-});
+// .service calls 'new' on the passed in function
+angular.module('myapp').service('audioService', AudioService);
+

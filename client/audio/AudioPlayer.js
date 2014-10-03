@@ -76,4 +76,4 @@ AudioPlayer.prototype.setVolume = function (value) {
 };
 
 // .service calls 'new' on the passed in function
-angular.module('myapp.audio', []).service('audioPlayer', AudioPlayer);
+angular.module('myapp').service('audioPlayer', AudioPlayer);
