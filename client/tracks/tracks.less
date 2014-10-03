@@ -49,7 +49,17 @@
 .track-list__track_currently-playing {
   color: @emphasis-color;
 }
+
+@-webkit-keyframes pulse_animation {
+  0% { -webkit-transform: scale(1); }
+  50% { -webkit-transform: scale(1.5); }
+  100% { -webkit-transform: scale(1); }
+}
+
 .track-list__track-play-icon__animated {
-
-
+  -webkit-animation-name: 'pulse_animation';
+  -webkit-animation-duration: 500ms;
+  -webkit-transform-origin:70% 70%;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
 }
