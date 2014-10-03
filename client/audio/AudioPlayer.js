@@ -1,72 +1,79 @@
-myapp.factory('AudioPlayer', function ($rootScope, $q, $window) {
+function AudioPlayer($rootScope, $q, $window) {
 
-  $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
+    $window.AudioContext = $window.AudioContext || $window.webkitAudioContext;
 
-  var context = new AudioContext();
+    this.context = new AudioContext();
+    this.track = undefined;
+    this.source = undefined;
+    this.trackBuffer = undefined;
+    this.gainNode = undefined;
 
-  var AudioPlayer = function(track) {
-    this.context = context;
+    this.rootScope = $rootScope;
+    this.q = $q;
+}
+
+AudioPlayer.prototype.load = function (track) {
     this.track = track;
-    this._trackBuffer = this._load(track);
-    this._gainNode = context.createGain();
-    this._isPlaying = false;
-  };
 
-  AudioPlayer.prototype._load = function(track) {
-    var deferred = $q.defer();
+    var deferred = this.q.defer();
     var fileReader = new FileReader();
-    fileReader.onload = function (e) {
-      context.decodeAudioData(e.target.result, function (buffer) {
-        deferred.resolve(buffer);
-      });
-    };
+    fileReader.onload = angular.bind(this, function (e) {
+        this.context.decodeAudioData(e.target.result, function (buffer) {
+            deferred.resolve(buffer);
+        });
+    });
     fileReader.readAsArrayBuffer(track.file);
 
-    $rootScope.$broadcast('AudioPlayer.trackChanged', track);
-    return deferred.promise;
-  };
+    this.rootScope.$broadcast('AudioPlayer.trackChanged', track);
+    this.trackBuffer = deferred.promise;
+};
 
-  AudioPlayer.prototype.play = function() {
-    // Generally, javascript callbacks, change the value of the "this" variable inside it
-    // so we need to keep a reference to the current instance "this".
-    var self = this;
+AudioPlayer.prototype.play = function () {
+    var context = this.context;
+    var rootScope = this.rootScope;
+    var track = this.track;
+    var trackBuffer = this.trackBuffer;
 
-    this._trackBuffer.then(function(buffer) {
-      self._source = context.createBufferSource();
-      self._remote =  context.createMediaStreamDestination();
-      self._source.buffer = buffer;
-      self._source.connect(context.destination);
-      self._gainNode.connect(context.destination);
-      self._source.connect(self._gainNode);
-      self._source.connect(self._remote);
-      self._source.start(0);
+    if (trackBuffer) {
+        trackBuffer.then(angular.bind(this, function (buffer) {
+            var source = context.createBufferSource();
+            var remote = context.createMediaStreamDestination();
+            var gainNode = context.createGain();
 
-      self._isPlaying = true;
+            source.buffer = buffer;
+            source.connect(context.destination);
+            gainNode.connect(context.destination);
+            source.connect(remote);
+            source.connect(gainNode);
+            source.start(0);
 
-      $rootScope.$broadcast('AudioPlayer.isPlaying', {
-        isPlaying: self._isPlaying,
-        trackName: self.track.name,
-        stream: self._remote.stream
-      });
-    });
+            rootScope.$broadcast('AudioPlayer.isPlaying', {
+                isPlaying: true,
+                trackName: track.name,
+                stream: remote.stream
+            });
 
-  };
-
-  AudioPlayer.prototype.stop = function() {
-    this._source && this._source.stop();
-    this._isPlaying = false;
-    $rootScope.$broadcast('AudioPlayer.isPlaying', {
-      isPlaying: this._isPlaying
-    });
-  };
-
-  AudioPlayer.prototype.setVolume = function(value) {
-    if (this._gainNode) {
-      this._gainNode.gain.value = value;
-      $rootScope.$broadcast('AudioPlayer.volumeChanged', value);
+            this.source = source;
+            this.gainNode = gainNode;
+        }));
     }
-  };
+};
 
-  return AudioPlayer;
+AudioPlayer.prototype.stop = function () {
+    if (this.source) {
+        this.source.stop();
+        this.rootScope.$broadcast('AudioPlayer.isPlaying', {
+            isPlaying: false
+        });
+    }
+};
 
-});
+AudioPlayer.prototype.setVolume = function (value) {
+    if (this.gainNode) {
+        this.gainNode.gain.value = value;
+        this.rootScope.$broadcast('AudioPlayer.volumeChanged', value);
+    }
+};
+
+// .service calls 'new' on the passed in function
+angular.module('myapp.audio', []).service('audioPlayer', AudioPlayer);
