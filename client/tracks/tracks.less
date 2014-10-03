@@ -14,6 +14,7 @@
 .track-list__track {
   padding: @gutter 0;
   border-bottom: 1px solid @secondary-color;
+  cursor: pointer;
 }
 
 .track-list__track:first-child {
@@ -21,6 +22,10 @@
 }
 
 .track-list__track_currently-playing {
+  color: @emphasis-color;
+}
+
+.track-list__track:hover {
   color: @secondary-color;
 }
 

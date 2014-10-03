@@ -2,6 +2,5 @@
     <li class="track-list__empty" ng-if="!tracks.length">Playlist is empty</li>
     <li class="track-list__track" ng-class="{'track-list__track_currently-playing' : track.isPlaying}" ng-repeat="track in tracks">
         <strong class="track-list__track-name" ng-click="select(track)">{{track.name}}</strong>
-        <span ng-click="removeTrack(track)">x</span>
     </li>
 </ul>

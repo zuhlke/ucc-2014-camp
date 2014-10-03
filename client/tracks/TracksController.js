@@ -15,10 +15,6 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
     _.debounce(function () { audioService.selectTrack(track) }, 150)();
   };
 
-  $scope.removeTrack = function (track) {
-    _($scope.tracks).remove(function (t) { return t === track; });
-  };
-
   $scope.$on('audioService.trackChanged', function (event, track) {
     angular.forEach($scope.tracks, function (value, key) {
       value.isPlaying = track.name === value.name;
