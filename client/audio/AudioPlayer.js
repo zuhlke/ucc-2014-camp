@@ -50,7 +50,8 @@ AudioPlayer.prototype.play = function () {
             rootScope.$broadcast('AudioPlayer.isPlaying', {
                 isPlaying: true,
                 trackName: track.name,
-                stream: remote.stream
+                stream: remote.stream,
+                trackLength : Math.round(source.buffer.duration)
             });
 
             this.source = source;
