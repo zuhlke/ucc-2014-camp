@@ -38,7 +38,7 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
                     trackname = tags.artist + " - " + tags.album + " - " + (tags.v1.track || tags.v2.track) + ". " + tags.title;
                 }
                 var imageSource = "";
-                if (tags.v2.image.data) {
+                if (tags && tags.v2 && tags.v2.image && tags.v2.image.data) {
                     var bytes = new Uint8Array(tags.v2.image.data);
                     imageSource = "data:" + tags.v2.image.mime + ";base64," + encode(bytes);
                 }
