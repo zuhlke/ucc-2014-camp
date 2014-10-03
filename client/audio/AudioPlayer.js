@@ -7,6 +7,7 @@ function AudioPlayer($rootScope, $q, $window) {
     this.source = undefined;
     this.trackBuffer = undefined;
     this.gainNode = undefined;
+    this.remoteStream = undefined;
 
     this.rootScope = $rootScope;
     this.q = $q;
@@ -56,6 +57,7 @@ AudioPlayer.prototype.play = function () {
 
             this.source = source;
             this.gainNode = gainNode;
+            this.remoteStream = remote.stream;
         }));
     }
 };
@@ -66,6 +68,7 @@ AudioPlayer.prototype.stop = function () {
         this.rootScope.$broadcast('AudioPlayer.isPlaying', {
             isPlaying: false
         });
+        this.remoteStream = undefined;
     }
 };
 
@@ -74,6 +77,10 @@ AudioPlayer.prototype.setVolume = function (value) {
         this.gainNode.gain.value = value;
         this.rootScope.$broadcast('AudioPlayer.volumeChanged', value);
     }
+};
+
+AudioPlayer.prototype.getRemoteStream = function () {
+    this.remoteStream;
 };
 
 // .service calls 'new' on the passed in function

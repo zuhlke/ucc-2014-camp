@@ -1,4 +1,4 @@
-myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
+myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log, audioPlayer) {
 
   var peer;
   var myPeerId;
@@ -55,12 +55,16 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
       conn.on('data', function (data) {
         $log.debug(data.name + ' received from ' + data.id);
         if (data.type === 'username') {
-          myPeers[data.id].username = data.name;
           $log.debug('Username received for ' + data.id + ' set to ' + data.name);
+          myPeers[data.id].username = data.name;
         }
         if (data.type === 'track') {
-          myPeers[data.id].track = data.track;
           $log.debug('Track received for ' + data.id + ' set to ' + data.track);
+          myPeers[data.id].track = data.track;
+        }
+        if (data.type === 'listen') {
+          $log.debug('Stream request received for ' + data.id);
+          webRTCService.sendStream(data.id, audioPlayer.getRemoteStream(), "The thingy we sent");
         }
         $rootScope.$apply();
       });
@@ -95,7 +99,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
   };
 
   webRTCService.pushTrack = function(track) {
-    push({
+    pushAll({
       id: myPeerId,
       track: track,
       type: 'track'
@@ -103,25 +107,36 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
   };
 
   webRTCService.pushUsername = function() {
-    push({
+    pushAll({
       id: myPeerId,
       name: username,
       type: 'username'
     });
   };
 
-  function push(data) {
+  webRTCService.requestStream = function (otherPeerId) {
+    push(otherPeerId, {
+      id: myPeerId,
+      type: 'listen'
+    })
+  };
+
+  function pushAll(data) {
     for (var id in myPeers) {
-      var conn = myPeers[id].connection;
-      $log.debug('pushed ' + data + ' to ' + id);
-      if (conn.open) conn.send(data);
-      else conn.on('open', function() {
-        conn.send(data);
-      });
-      conn.on('error', function (msg) {
-        $log.debug('error: ' + msg);
-      });
+      push(id, data);
     }
+  }
+
+  function push(id, data) {
+    var conn = myPeers[id].connection;
+    $log.debug('pushed ' + data + ' to ' + id);
+    if (conn.open) conn.send(data);
+    else conn.on('open', function () {
+      conn.send(data);
+    });
+    conn.on('error', function (msg) {
+      $log.debug('error: ' + msg);
+    });
   }
 
   webRTCService.sendStream = function (peerId, stream, trackName) {
