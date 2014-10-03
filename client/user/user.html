@@ -1,5 +1,6 @@
 <div class="user" ng-controller="UserController as user">
     <input ng-model="user.name.value" ng-show="user.name.isInEditMode"
+           ng-keypress="user.setName($event)"
            class="user__name-editable" placeholder="Enter your username" type="text"/>
     <i ng-show="user.name.isInEditMode" ng-class="{'user__name-edit-action_disabled' : !user.name.value}" ng-click="user.toggleEditMode();"
        class="user__name-edit-action fa fa-check"></i>

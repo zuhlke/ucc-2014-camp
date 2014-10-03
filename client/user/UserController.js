@@ -15,4 +15,10 @@ UserController.prototype.toggleEditMode = function () {
   }
 }
 
+UserController.prototype.setName = function (keyEvent){
+  if (keyEvent.keyCode === 13){
+    this.toggleEditMode();
+  }
+}
+
 angular.module('myapp').controller('UserController', UserController);
