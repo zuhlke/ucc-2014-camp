@@ -12,13 +12,11 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
   });
 
   $scope.select = function (track) {
-    _.debounce(function () { audioService.selectTrack(track) }, 150)();
-  };
-
-  $scope.$on('audioService.trackChanged', function (event, track) {
+    _.debounce(function () {
+      audioService.selectTrack(track)
+    }, 150)();
     angular.forEach($scope.tracks, function (value, key) {
       value.isPlaying = track.name === value.name;
     });
-  });
-
+  };
 });
