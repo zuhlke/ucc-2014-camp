@@ -5,14 +5,17 @@ myapp.controller('TracksController', function ($scope, $rootScope, $log, audioSe
         _(files).forEach(function (file) {
             id3(file, function (err, tags) {
                 $log.debug("Loaded " + file.name + " tags " + JSON.stringify(tags));
+                var trackname = file.name;
+                if (tags.artist && tags.album && tags.v1.track && tags.title) {
+                    trackname = tags.artist + " - " + tags.album + " - " + tags.v1.track + ". " + tags.title;
+                }
                 $scope.$apply(function () {
                     $scope.tracks.push({
                         file: file,
-                        name: tags.artist + " - " + tags.album + " - " + tags.v1.track + ". " + tags.title,
+                        name: trackname,
                         isPlaying: false,
                         isSelected: false
                     });
-
                 });
             });
         });
