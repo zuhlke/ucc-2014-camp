@@ -14,6 +14,7 @@ function AudioPlayer($rootScope, $q, $window) {
 }
 
 AudioPlayer.prototype.load = function (track) {
+    this.stop();
     this.track = track;
 
     var deferred = this.q.defer();

@@ -23,6 +23,7 @@ function AudioService($rootScope, $log, audioPlayer, webRTCService) {
 
 AudioService.prototype.selectTrack = function (track) {
     this.audioPlayer.load(track);
+    this.audioPlayer.play();
 };
 
 AudioService.prototype.play = function () {
