@@ -15,18 +15,36 @@
   padding: @gutter 0;
   border-bottom: 1px solid @secondary-color;
   cursor: pointer;
+  position: relative;
 }
 
 .track-list__track:first-child {
   padding-top: 0;
 }
 
-.track-list__track_currently-playing {
-  color: @emphasis-color;
-}
-
 .track-list__track:hover {
   color: @secondary-color;
 }
 
+.track-list__track-name{
+  padding-right: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+}
 
+.track-list__track-play-icon{
+  position: absolute;
+  bottom: 0.7em;
+  right: 0;
+  display: none;
+}
+
+.track-list__track:hover .track-list__track-play-icon {
+  display: block;
+}
+
+.track-list__track_currently-playing {
+  color: @emphasis-color;
+}
