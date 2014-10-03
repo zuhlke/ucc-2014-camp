@@ -64,7 +64,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log, a
         }
         if (data.type === 'listen') {
           $log.debug('Stream request received for ' + data.id);
-          webRTCService.sendStream(data.id, audioPlayer.getRemoteStream(), "The thingy we sent");
+          webRTCService.sendStream(data.id, audioPlayer.getRemoteStream(), audioPlayer.getCurrentTrack().name);
         }
         $rootScope.$apply();
       });
@@ -140,6 +140,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log, a
   }
 
   webRTCService.sendStream = function (peerId, stream, trackName) {
+    $log.debug("Calling " + peerId + " with stream " + stream);
     peer.call(peerId, stream, { metadata: { trackName: trackName }});
   };
 

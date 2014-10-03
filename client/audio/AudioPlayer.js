@@ -81,7 +81,11 @@ AudioPlayer.prototype.setVolume = function (value) {
 };
 
 AudioPlayer.prototype.getRemoteStream = function () {
-    this.remoteStream;
+  return this.remoteStream;
+};
+
+AudioPlayer.prototype.getCurrentTrack = function () {
+  return this.track;
 };
 
 // .service calls 'new' on the passed in function
