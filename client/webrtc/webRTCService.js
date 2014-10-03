@@ -4,7 +4,7 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
   var myPeerId;
   var myPeers = {}; // map of friends
   var webRTCService = {};
-  var username = "<unkonwn>";
+  var username = "unknown";
 
   webRTCService.connect = function () {
     var deferred = $q.defer();
@@ -55,9 +55,13 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
         $log.debug(data.name + ' received from ' + data.id);
         if (data.type === 'username') {
           myPeers[data.id].username = data.name;
-          $log.debug('Username received for ' + data.id + ' set to' + data.name);
-          $rootScope.$apply();
+          $log.debug('Username received for ' + data.id + ' set to ' + data.name);
         }
+        if (data.type === 'track') {
+          myPeers[data.id].track = data.track;
+          $log.debug('Track received for ' + data.id + ' set to ' + data.track);
+        }
+        $rootScope.$apply();
       });
     });
 
@@ -78,13 +82,16 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
       if (!_.contains(peers, id)) {
         delete myPeers[id];
       } else {
-        myPeers[id] = {};
+        myPeers[id] = {
+          username: username
+        };
         if (!myPeers[id].connection) {
           var p2pConn = peer.connect(id);
           myPeers[id].connection = p2pConn;
         }
       }
     }
+    console.dir(myPeers);
   };
 
   webRTCService.getPeers = function () {

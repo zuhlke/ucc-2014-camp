@@ -23,6 +23,7 @@ myapp.factory('audioService', function ($rootScope, $log, AudioPlayer, webRTCSer
   $rootScope.$on('AudioPlayer.isPlaying', function (event, audio) {
     if (audio.isPlaying) {
       var peers = webRTCService.getPeers();
+      webRTCService.pushTrack(audio.trackName);
       if(peers.length > 0) {
         $log.debug('Sending stream to: ' + peers[0]);
         webRTCService.sendStream(peers[0], audio.stream, audio.trackName);
