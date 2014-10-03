@@ -4,7 +4,8 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
   var myPeerId;
   var myPeers = {}; // map of friends
   var webRTCService = {};
-  var username = "unknown";
+  var defaultUsername = "unknown";
+  var username = defaultUsername;
 
   webRTCService.connect = function () {
     var deferred = $q.defer();
@@ -72,26 +73,20 @@ myapp.factory('webRTCService', function ($window, $http, $q, $rootScope, $log) {
     username = name;
   };
 
-  webRTCService.setPeers = function (peers) {
-    for (var i = 0; i < peers.length; ++i) {
-      myPeers[peers[i]] = {
-        username: username
-      };
-    }
-    for (var id in myPeers) {
-      if (!_.contains(peers, id)) {
-        delete myPeers[id];
-      } else {
-        myPeers[id] = {
-          username: username
+  webRTCService.setPeers = function (peerIds) {
+    _(peerIds).forEach(function(peerId) {
+      if (!myPeers[peerId]) {
+        myPeers[peerId] = {
+          username: defaultUsername,
+          connection: peer.connect(peerId)
         };
-        if (!myPeers[id].connection) {
-          var p2pConn = peer.connect(id);
-          myPeers[id].connection = p2pConn;
-        }
+      }
+    });
+    for (var peerId in myPeers) {
+      if (!_.contains(peerIds, peerId)) {
+        delete myPeers[peerId];
       }
     }
-    console.dir(myPeers);
   };
 
   webRTCService.getPeers = function () {
