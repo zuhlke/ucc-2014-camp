@@ -13,7 +13,7 @@
  */
 module.exports = function (grunt) {
 
-    grunt.registerTask('build', ['clean:build', 'copy:partials', 'wiredep', 'less', 'concat', 'uglify']);
+    grunt.registerTask('build', ['clean:build', 'copy:partials', 'bower:install', 'less', 'concat', 'uglify']);
 
     grunt.registerTask('build-watch', ['build', 'watch']);
 
@@ -25,6 +25,17 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
+        bower: {
+            install: {
+                options: {
+                    targetDir: 'public/vendor',
+                    bowerOptions: {
+                        production: false
+                    }
+                }
+            }
+        },
 
         // https://www.npmjs.org/package/grunt-wiredep
         wiredep: {
@@ -49,7 +60,7 @@ module.exports = function (grunt) {
         less: {
             client: {
                 options: {
-                    paths: [ 'client/**/*.less', 'public/vendor/bootstrap/less' ],
+                    paths: [ 'client/**/*.less' ],
                     concat: true,
                     cleancss: true
                 },
@@ -116,7 +127,8 @@ module.exports = function (grunt) {
                     'processed',
                     'public/js',
                     'public/css',
-                    'public/partials'
+                    'public/partials',
+                    'public/vendor'
                 ]
             },
             // Run this task with the 'grunt clean:test' command.
@@ -130,7 +142,7 @@ module.exports = function (grunt) {
             node: {
                 src: [
                     'node_modules',
-                    'public/vendor'
+                    'bower_components'
                 ]
             }
 
@@ -204,6 +216,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-env');
     grunt.loadNpmTasks('grunt-protractor-runner');
