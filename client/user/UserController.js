@@ -1,24 +1,29 @@
 function UserController(webRTCService) {
-  this.id = null;
-  this.name = {
-    isInEditMode: true,
-    value: null
-  };
-  this.webRTCService = webRTCService;
-}
+    var self = this;
 
-UserController.prototype.toggleEditMode = function () {
-  if (this.name.value) {
-    this.name.isInEditMode = !this.name.isInEditMode;
-    this.webRTCService.setUsername(this.name.value);
-    this.webRTCService.pushUsername();
-  }
-}
+    self.id = null;
+    self.name = {
+        isInEditMode: true,
+        value: null
+    };
 
-UserController.prototype.setName = function (keyEvent){
-  if (keyEvent.keyCode === 13){
-    this.toggleEditMode();
-  }
+    self.toggleEditMode = function () {
+        if (self.name.value) {
+            self.name.isInEditMode = !self.name.isInEditMode;
+            webRTCService.setUsername(self.name.value);
+            webRTCService.pushUsername();
+        }
+    }
+
+    self.setName = function (keyEvent) {
+        if (keyEvent.keyCode === 13) {
+            self.toggleEditMode();
+        }
+    }
+
 }
 
 angular.module('myapp').controller('UserController', UserController);
+
+
+
